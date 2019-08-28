@@ -2,14 +2,19 @@ const uuid = require('uuid');
 const User = require('./User');
 
 class Room {
-  constructor({ deckIndex }) {
+  constructor({ deckIndex, facilitatorId }) {
     this.id = uuid();
+    this.facilitatorId = facilitatorId;
     this.deckIndex = deckIndex;
     this.users = [];
   }
 
-  addUser(name) {
-    this.users.push(new User(name));
+  addUser(name, id) {
+    this.users.push(new User(name, id));
+  }
+
+  removeUser(id) {
+    this.users = this.users.filter(u => u.id !== id);
   }
 
   getState() {
@@ -20,15 +25,8 @@ class Room {
     };
   }
 
-  handleVote(name, vote) {
-    let user = this.users.find(u => u.name === name);
-
-    if (!user) {
-      user = new User(name);
-      this.users.push(user);
-    }
-
-    user.handleVote(vote);
+  handleVote(id, vote) {
+    this.users.find(u => u.id === id).handleVote(vote);
   }
 
   startVoting() {

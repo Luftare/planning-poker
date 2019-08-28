@@ -6,13 +6,17 @@ import Title from '../components/Title';
 
 export default withRouter(props => {
   const [roomId] = useGlobal('roomId');
-  const [name] = useGlobal('name');
   const [, setUsers] = useGlobal('users');
 
   const handleCardSelection = vote => {
-    props.socket.emit('VOTE', { name, vote, roomId }, roomState => {
-      setUsers(roomState.users);
-      props.history.push(`/${roomState.id}`);
+    props.socket.emit('VOTE', { vote, roomId }, (err, roomState) => {
+      if (err) {
+        console.log(err);
+        props.history.push(`/`);
+      } else {
+        setUsers(roomState.users);
+        props.history.push(`/${roomState.id}`);
+      }
     });
   };
 

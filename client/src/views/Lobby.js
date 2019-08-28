@@ -22,6 +22,11 @@ export default withRouter(props => {
       setUsers(roomState.users);
     });
 
+    socket.on('QUIT_ROOM', () => {
+      console.log('Facilitator disconnected.');
+      history.push('/');
+    });
+
     if (!facilitator) {
       socket.on('START_VOTE', () => {
         history.push(`/${roomId}/vote`);

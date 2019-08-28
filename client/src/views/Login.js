@@ -1,4 +1,4 @@
-import React, { useGlobal } from 'reactn';
+import React, { useEffect, useGlobal } from 'reactn';
 import { withRouter, Link } from 'react-router-dom';
 import { CenteredPage } from '../components/Page';
 
@@ -10,14 +10,28 @@ export default withRouter(props => {
   const [, setUsers] = useGlobal('users');
   const [, setRoomId] = useGlobal('roomId');
 
+  useEffect(() => {
+    socket.emit('DOES_ROOM_EXIST', roomId, exists => {
+      if (!exists) {
+        console.log('Room does not exist.');
+        history.push(`/`);
+      }
+    });
+  }, [socket, roomId, history]);
+
   const handleLogin = e => {
     e.preventDefault();
 
-    socket.emit('JOIN_ROOM', { id: roomId, name }, roomState => {
-      setDeckIndex(roomState.deckIndex);
-      setUsers(roomState.users);
-      setRoomId(roomState.id);
-      history.push(`/${roomState.id}`);
+    socket.emit('JOIN_ROOM', { id: roomId, name }, (err, roomState) => {
+      if (err) {
+        console.log(err);
+        history.push(`/`);
+      } else {
+        setDeckIndex(roomState.deckIndex);
+        setUsers(roomState.users);
+        setRoomId(roomState.id);
+        history.push(`/${roomState.id}`);
+      }
     });
   };
 

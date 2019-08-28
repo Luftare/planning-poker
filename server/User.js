@@ -1,6 +1,7 @@
 module.exports = class User {
-  constructor(name) {
+  constructor(name, id) {
     this.name = name;
+    this.id = id;
     this.voted = false;
     this.vote = 0;
   }
