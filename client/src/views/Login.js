@@ -35,11 +35,7 @@ export default withRouter(props => {
         setRoomId(roomState.id);
         setCurrentVoteTopic(roomState.voteTopic);
 
-        const shouldVote = roomState.users.some(
-          u => !u.voted && u.name !== name
-        );
-
-        if (shouldVote) {
+        if (roomState.voting) {
           history.push(`/${roomState.id}/vote`);
         } else {
           history.push(`/${roomState.id}`);

@@ -45,11 +45,9 @@ class Controller {
         }
       });
 
-      socket.on('VOTE', ({ vote }, callback) => {
+      socket.on('ROOM_STATE', callback => {
         if (room) {
-          room.handleVote(socket.id, vote);
           callback(null, room.getState());
-          this.io.sockets.in(room.id).emit('ROOM_STATE', room.getState());
         } else {
           callback('Room not found.');
         }
@@ -58,11 +56,22 @@ class Controller {
       socket.on('START_VOTE', (voteTopic, callback) => {
         if (room) {
           room.voteTopic = voteTopic;
+          room.voting = true;
           room.startVoting();
           this.io.sockets.in(room.id).emit('START_VOTE', room.getState());
           callback(null, room.getState());
         } else {
           callback('Failed to start vote.');
+        }
+      });
+
+      socket.on('VOTE', ({ vote }, callback) => {
+        if (room) {
+          room.handleVote(socket.id, vote);
+          callback(null, room.getState());
+          this.io.sockets.in(room.id).emit('ROOM_STATE', room.getState());
+        } else {
+          callback('Room not found.');
         }
       });
 

@@ -5,18 +5,34 @@ import Cards from '../components/Cards';
 import Title from '../components/Title';
 
 export default withRouter(props => {
-  const { socket } = props;
+  const { socket, history } = props;
+  const { roomId } = props.match.params;
+  const [name] = useGlobal('name');
+  const [facilitator] = useGlobal('facilitator');
   const [, setUsers] = useGlobal('users');
   const [currentVoteTopic, setCurrentVoteTopic] = useGlobal('currentVoteTopic');
 
   useEffect(() => {
+    if (!name && !facilitator) {
+      history.push(`/${roomId}/login`);
+      return;
+    }
+
     socket.on('START_VOTE', roomState => {
       setCurrentVoteTopic(roomState.voteTopic);
     });
     return () => {
       socket.removeAllListeners();
     };
-  }, [socket, setUsers, setCurrentVoteTopic]);
+  }, [
+    history,
+    socket,
+    name,
+    setUsers,
+    setCurrentVoteTopic,
+    roomId,
+    facilitator,
+  ]);
 
   const handleCardSelection = vote => {
     props.socket.emit('VOTE', { vote }, (err, roomState) => {

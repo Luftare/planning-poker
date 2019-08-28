@@ -1,6 +1,6 @@
 import React, { useEffect, useGlobal } from 'reactn';
 import styled from 'styled-components';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { CenteredPage } from '../components/Page';
 import { Button, SmallButton } from '../components/Button';
 import Users from '../components/Users';
@@ -26,6 +26,14 @@ export default withRouter(props => {
   const [, setUsers] = useGlobal('users');
 
   useEffect(() => {
+    socket.emit('ROOM_STATE', (err, roomState) => {
+      if (err) {
+        console.log(err);
+      } else {
+        setUsers(roomState.users);
+      }
+    });
+
     if (!name && !facilitator) {
       history.push(`/${roomId}/login`);
       return;
@@ -94,6 +102,12 @@ export default withRouter(props => {
         padding: '16px',
       }}
     >
+      <Link
+        to={`/${roomId}/qr`}
+        style={{ position: 'absolute', top: '8px', left: '8px' }}
+      >
+        QR
+      </Link>
       <Header>
         <CopyLink>{window.location.href}</CopyLink>
         {facilitator && (

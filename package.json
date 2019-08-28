@@ -12,9 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "shortid": "^2.2.14",
     "socket.io": "^2.2.0",
-    "styled-components": "^4.3.2",
-    "uuid": "^3.3.3"
+    "styled-components": "^4.3.2"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"
