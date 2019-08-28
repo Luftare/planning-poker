@@ -5,6 +5,7 @@ import { Button } from '../components/Button';
 import Users from '../components/Users';
 import Title from '../components/Title';
 import CopyLink from '../components/CopyLink';
+import { TextInput } from '../components/TextInput';
 
 export default withRouter(props => {
   const { socket, history } = props;
@@ -12,6 +13,8 @@ export default withRouter(props => {
 
   const [name] = useGlobal('name');
   const [facilitator] = useGlobal('facilitator');
+  const [currentVoteTopic, setCurrentVoteTopic] = useGlobal('currentVoteTopic');
+  const [nextVoteTopic, setNextVoteTopic] = useGlobal('nextVoteTopic');
   const [, setUsers] = useGlobal('users');
 
   useEffect(() => {
@@ -29,21 +32,33 @@ export default withRouter(props => {
       history.push('/');
     });
 
-    if (!facilitator) {
-      socket.on('START_VOTE', () => {
+    socket.on('START_VOTE', roomState => {
+      setUsers(roomState.users);
+      setCurrentVoteTopic(roomState.voteTopic);
+
+      if (!facilitator) {
         history.push(`/${roomId}/vote`);
-      });
-    }
+      }
+    });
     return () => {
       socket.removeAllListeners();
     };
-  }, [socket, setUsers, history, roomId, name, facilitator]);
+  }, [
+    socket,
+    setUsers,
+    setCurrentVoteTopic,
+    history,
+    roomId,
+    name,
+    facilitator,
+  ]);
 
   const startVote = () => {
-    socket.emit('START_VOTE', (err, roomState) => {
+    socket.emit('START_VOTE', nextVoteTopic, (err, roomState) => {
       if (err) {
         console.log(err);
       } else {
+        setNextVoteTopic('');
         setUsers(roomState.users);
       }
     });
@@ -56,10 +71,20 @@ export default withRouter(props => {
         padding: '16px',
       }}
     >
-      <CopyLink>{window.location.href}</CopyLink>
-      <div>
-        <Title style={{ margin: '32px 0' }}>Houston Planning Poker</Title>
-        <Users />
+      <div style={{ textAlign: 'center' }}>
+        <CopyLink>{window.location.href}</CopyLink>
+        {facilitator && (
+          <TextInput
+            placeholder="Topic (optional)"
+            value={nextVoteTopic}
+            onChange={e => setNextVoteTopic(e.target.value)}
+            style={{ fontSize: '14px', display: 'block', marginTop: '32px' }}
+          />
+        )}
+        {currentVoteTopic && (
+          <Title style={{ margin: '16px 0' }}>Voting: {currentVoteTopic}</Title>
+        )}
+        <Users style={{ marginTop: '32px' }} />
       </div>
       {facilitator && <Button onClick={startVote}>Start vote</Button>}
     </CenteredPage>

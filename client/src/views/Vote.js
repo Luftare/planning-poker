@@ -7,6 +7,7 @@ import Title from '../components/Title';
 export default withRouter(props => {
   const [roomId] = useGlobal('roomId');
   const [, setUsers] = useGlobal('users');
+  const [currentVoteTopic] = useGlobal('currentVoteTopic');
 
   const handleCardSelection = vote => {
     props.socket.emit('VOTE', { vote, roomId }, (err, roomState) => {
@@ -22,7 +23,9 @@ export default withRouter(props => {
 
   return (
     <CenteredPage>
-      <Title style={{ marginBottom: '32px' }}>Vote</Title>
+      <Title style={{ marginBottom: '32px' }}>
+        Vote{currentVoteTopic && `: ${currentVoteTopic}`}
+      </Title>
       <Cards onSelect={handleCardSelection} />
     </CenteredPage>
   );

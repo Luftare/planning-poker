@@ -15,6 +15,8 @@ setGlobal({
   roomId: '',
   users: [],
   deckIndex: 0,
+  nextVoteTopic: '',
+  currentVoteTopic: '',
   decks: [
     {
       label: 'Custom Fibonacci',

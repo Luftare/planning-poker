@@ -22,6 +22,7 @@ export default props => {
           hideVote={hideVotes}
         />
       ))}
+      {users.length === 0 && <div>Waiting for voters...</div>}
     </Container>
   );
 };
