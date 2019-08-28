@@ -2,7 +2,7 @@ import React, { useEffect, useGlobal } from 'reactn';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { CenteredPage } from '../components/Page';
-import { Button } from '../components/Button';
+import { Button, SmallButton } from '../components/Button';
 import Users from '../components/Users';
 import Title from '../components/Title';
 import CopyLink from '../components/CopyLink';
@@ -64,6 +64,17 @@ export default withRouter(props => {
     socket.emit('KICK_USER', user.id);
   };
 
+  const voteAgain = () => {
+    socket.emit('START_VOTE', currentVoteTopic, (err, roomState) => {
+      if (err) {
+        console.log(err);
+      } else {
+        setNextVoteTopic('');
+        setUsers(roomState.users);
+      }
+    });
+  };
+
   const startVote = () => {
     socket.emit('START_VOTE', nextVoteTopic, (err, roomState) => {
       if (err) {
@@ -93,13 +104,21 @@ export default withRouter(props => {
           />
         )}
         {currentVoteTopic && (
-          <Title style={{ margin: '16px 0' }}>Voting: {currentVoteTopic}</Title>
+          <>
+            <Title style={{ margin: '16px 0' }}>
+              <span style={{ marginRight: '16px' }}>
+                Voting: {currentVoteTopic}
+              </span>
+              <SmallButton onClick={voteAgain}>Vote again</SmallButton>
+            </Title>
+          </>
         )}
       </Header>
       <Users
         style={{ marginTop: facilitator ? 0 : '32px' }}
         onRemoveUser={facilitator && (user => removeUser(user))}
       />
+
       {facilitator && <Button onClick={startVote}>Start vote</Button>}
     </CenteredPage>
   );

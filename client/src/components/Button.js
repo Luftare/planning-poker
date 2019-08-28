@@ -10,3 +10,12 @@ export const Button = styled.button`
   display: block;
   max-width: 200px;
 `;
+
+export const SmallButton = styled(Button)`
+  display: inline;
+  font-size: 18px;
+  padding: 0;
+  color: ${theme.colors.primary};
+  background-color: unset;
+  text-decoration: underline;
+`;
