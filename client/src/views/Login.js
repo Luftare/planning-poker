@@ -41,6 +41,7 @@ export default withRouter(props => {
     <CenteredPage>
       <form onSubmit={handleLogin} style={{ display: 'flex' }}>
         <TextInput
+          placeholder="Name"
           onChange={e => setName(e.target.value)}
           style={{ marginRight: '8px' }}
         />

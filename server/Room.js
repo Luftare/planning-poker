@@ -7,6 +7,7 @@ class Room {
     this.facilitatorId = facilitatorId;
     this.deckIndex = deckIndex;
     this.users = [];
+    this.voteTopic = '';
   }
 
   addUser(name, id) {
@@ -22,6 +23,7 @@ class Room {
       users: this.users,
       id: this.id,
       deckIndex: this.deckIndex,
+      voteTopic: this.voteTopic,
     };
   }
 
