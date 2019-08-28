@@ -16,9 +16,10 @@ const Option = styled.div`
   border: ${({ active }) =>
     `solid ${active ? theme.colors.grey : 'transparent'} 1px`}
   color: ${theme.colors.black};
-  padding: 8px 16px;
-  font-size: 24px;
+  padding: 14px 16px;
+  font-size: 18px;
   cursor: pointer;
+  border-radius: 5px;
 `;
 
 export const OptionGroup = ({ options, activeIndex, onChange }, ...rest) => {

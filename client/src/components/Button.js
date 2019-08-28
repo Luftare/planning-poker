@@ -4,12 +4,18 @@ import { theme } from '../styles';
 export const Button = styled.button`
   background-color: ${theme.colors.primary};
   color: ${theme.colors.black};
-  padding: 8px 16px;
+  padding: 16px 20px;
   border: none;
-  font-size: 24px;
+  font-size: 18px;
   display: block;
   max-width: 200px;
   cursor: pointer;
+  border-radius: 5px;
+  text-transform: uppercase;
+
+  :hover {
+    background-color: #ffb700;
+  }
 `;
 
 export const SmallButton = styled(Button)`
@@ -19,4 +25,8 @@ export const SmallButton = styled(Button)`
   color: ${theme.colors.primary};
   background-color: unset;
   text-decoration: underline;
+
+  :hover {
+    background-color: transparent;
+  }
 `;

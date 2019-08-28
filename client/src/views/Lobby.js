@@ -1,6 +1,7 @@
 import React, { useEffect, useGlobal } from 'reactn';
 import styled from 'styled-components';
 import { withRouter, Link } from 'react-router-dom';
+import { theme } from '../styles';
 import { CenteredPage } from '../components/Page';
 import { Button, SmallButton } from '../components/Button';
 import Users from '../components/Users';
@@ -104,7 +105,12 @@ export default withRouter(props => {
     >
       <Link
         to={`/${roomId}/qr`}
-        style={{ position: 'absolute', top: '8px', left: '8px' }}
+        style={{
+          position: 'absolute',
+          top: '8px',
+          left: '8px',
+          color: theme.colors.grey,
+        }}
       >
         QR
       </Link>
@@ -115,12 +121,13 @@ export default withRouter(props => {
             placeholder="Topic (optional)"
             value={nextVoteTopic}
             onChange={e => setNextVoteTopic(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && startVote()}
             style={{ display: 'block', marginTop: '32px' }}
           />
         )}
         {currentVoteTopic && (
           <>
-            <Title style={{ margin: '16px 0' }}>
+            <Title style={{ margin: '32px 0' }}>
               <span style={{ marginRight: facilitator ? '8px' : 0 }}>
                 {currentVoteTopic}
               </span>

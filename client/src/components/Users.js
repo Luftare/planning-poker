@@ -4,9 +4,9 @@ import User from './User';
 
 const Container = styled.div`
   display: grid;
-  grid-gap: 8px;
+  grid-gap: 12px;
   width: 80%;
-  max-width: 200px;
+  max-width: 250px;
 `;
 
 export default ({ onRemoveUser, ...rest }) => {

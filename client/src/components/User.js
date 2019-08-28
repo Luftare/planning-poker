@@ -25,6 +25,7 @@ const RemoveButton = styled.span`
 const VoteBox = styled.span`
   font-size: 24px;
   display: inline-block;
+  font-weight: 500;
   width: 25px;
   height: 25px;
   ${({ fill }) => fill && `background-color: ${fill};`}

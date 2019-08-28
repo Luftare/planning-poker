@@ -33,7 +33,7 @@ export default withRouter(props => {
         activeIndex={deckIndex}
         onChange={setDeckIndex}
       />
-      <Button onClick={handleClick} style={{ marginTop: '16px' }}>
+      <Button onClick={handleClick} style={{ marginTop: '24px' }}>
         Create room
       </Button>{' '}
     </CenteredPage>

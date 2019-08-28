@@ -19,16 +19,16 @@ setGlobal({
   currentVoteTopic: '',
   decks: [
     {
-      label: 'Custom Fibonacci',
-      cards: [1, 2, 3, 5, 8, 13, 20, 40, '?!'],
+      label: 'T-shirt',
+      cards: ['xs', 's', 'm', 'l', 'xl', 'xxl'],
     },
     {
       label: 'Exponential',
       cards: [1, 2, 4, 8, 16, 32, '?!'],
     },
     {
-      label: 'T-shirt',
-      cards: ['xs', 's', 'm', 'l', 'xl', 'xxl'],
+      label: 'Custom Fibonacci',
+      cards: [1, 2, 3, 5, 8, 13, 20, 40, '?!'],
     },
   ],
 });

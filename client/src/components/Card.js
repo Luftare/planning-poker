@@ -10,6 +10,7 @@ const Container = styled.div`
   background-color: ${theme.colors.lightGrey};
   height: 80px;
   font-size: 32px;
+  cursor: pointer;
 `;
 
 export default ({ label, ...rest }) => <Container {...rest}>{label}</Container>;
