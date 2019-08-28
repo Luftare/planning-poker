@@ -5,14 +5,16 @@ import User from './User';
 const Container = styled.div`
   display: grid;
   grid-gap: 8px;
+  width: 80%;
+  max-width: 200px;
 `;
 
-export default props => {
+export default ({ onRemoveUser, ...rest }) => {
   const [users] = useGlobal('users');
   const hideVotes = users.some(user => !user.voted);
 
   return (
-    <Container {...props}>
+    <Container {...rest}>
       {users.map(user => (
         <User
           key={user.name}
@@ -20,9 +22,13 @@ export default props => {
           vote={user.vote}
           voted={user.voted}
           hideVote={hideVotes}
+          canRemove={!!onRemoveUser}
+          onRemove={() => onRemoveUser(user)}
         />
       ))}
-      {users.length === 0 && <div>Waiting for voters...</div>}
+      {users.length === 0 && (
+        <div style={{ textAlign: 'center' }}>Waiting for voters...</div>
+      )}
     </Container>
   );
 };

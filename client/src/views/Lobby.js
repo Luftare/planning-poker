@@ -1,4 +1,5 @@
 import React, { useEffect, useGlobal } from 'reactn';
+import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { CenteredPage } from '../components/Page';
 import { Button } from '../components/Button';
@@ -6,6 +7,12 @@ import Users from '../components/Users';
 import Title from '../components/Title';
 import CopyLink from '../components/CopyLink';
 import { TextInput } from '../components/TextInput';
+
+const Header = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 export default withRouter(props => {
   const { socket, history } = props;
@@ -53,6 +60,10 @@ export default withRouter(props => {
     facilitator,
   ]);
 
+  const removeUser = user => {
+    socket.emit('KICK_USER', user.id);
+  };
+
   const startVote = () => {
     socket.emit('START_VOTE', nextVoteTopic, (err, roomState) => {
       if (err) {
@@ -71,7 +82,7 @@ export default withRouter(props => {
         padding: '16px',
       }}
     >
-      <div style={{ textAlign: 'center' }}>
+      <Header>
         <CopyLink>{window.location.href}</CopyLink>
         {facilitator && (
           <TextInput
@@ -84,8 +95,11 @@ export default withRouter(props => {
         {currentVoteTopic && (
           <Title style={{ margin: '16px 0' }}>Voting: {currentVoteTopic}</Title>
         )}
-        <Users style={{ marginTop: '32px' }} />
-      </div>
+      </Header>
+      <Users
+        style={{ marginTop: facilitator ? 0 : '32px' }}
+        onRemoveUser={facilitator && (user => removeUser(user))}
+      />
       {facilitator && <Button onClick={startVote}>Start vote</Button>}
     </CenteredPage>
   );

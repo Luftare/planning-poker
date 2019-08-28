@@ -24,6 +24,14 @@ class Controller {
         callback(!!this.rooms[roomId]);
       });
 
+      socket.on('KICK_USER', userId => {
+        if (room) {
+          room.removeUser(userId);
+          this.io.sockets.to(userId).emit('QUIT_ROOM');
+          this.io.sockets.in(room.id).emit('ROOM_STATE', room.getState());
+        }
+      });
+
       socket.on('JOIN_ROOM', ({ id, name }, callback) => {
         room = this.rooms[id];
 
