@@ -1,5 +1,5 @@
 import React, { useEffect, useGlobal } from 'reactn';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { CenteredPage } from '../components/Page';
 
 export default withRouter(props => {
@@ -41,7 +41,6 @@ export default withRouter(props => {
         <input onChange={e => setName(e.target.value)} />
         <button type="submit">Join</button>
       </form>
-      <Link to="/">New room</Link>
     </CenteredPage>
   );
 });

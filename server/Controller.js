@@ -47,10 +47,13 @@ class Controller {
         }
       });
 
-      socket.on('START_VOTE', () => {
+      socket.on('START_VOTE', callback => {
         if (room) {
           room.startVoting();
           this.io.sockets.in(room.id).emit('START_VOTE');
+          callback(null, room.getState());
+        } else {
+          callback('Failed to start vote.');
         }
       });
 

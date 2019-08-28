@@ -3,6 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { CenteredPage } from '../components/Page';
 import { Button } from '../components/Button';
 import Users from '../components/Users';
+import Title from '../components/Title';
+import CopyLink from '../components/CopyLink';
 
 export default withRouter(props => {
   const { socket, history } = props;
@@ -38,13 +40,27 @@ export default withRouter(props => {
   }, [socket, setUsers, history, roomId, name, facilitator]);
 
   const startVote = () => {
-    socket.emit('START_VOTE', roomId);
+    socket.emit('START_VOTE', (err, roomState) => {
+      if (err) {
+        console.log(err);
+      } else {
+        setUsers(roomState.users);
+      }
+    });
   };
 
   return (
-    <CenteredPage>
-      <span>{window.location.href}</span>
-      <Users />
+    <CenteredPage
+      style={{
+        justifyContent: facilitator ? 'space-between' : 'flex-start',
+        padding: '16px',
+      }}
+    >
+      <CopyLink>{window.location.href}</CopyLink>
+      <div>
+        <Title style={{ margin: '32px 0' }}>Houston Planning Poker</Title>
+        <Users />
+      </div>
       {facilitator && <Button onClick={startVote}>Start vote</Button>}
     </CenteredPage>
   );

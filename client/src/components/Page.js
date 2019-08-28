@@ -6,6 +6,7 @@ export const Page = styled.div`
   flex-direction: column;
   padding: 0 16px;
   background-color: ${theme.colors.white};
+  box-sizing: border-box;
 `;
 
 export const CenteredPage = styled(Page)`

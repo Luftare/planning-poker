@@ -12,13 +12,18 @@ const VoteBox = styled.span`
   display: inline-block;
   width: 20px;
   height: 20px;
-  background-color: ${({ dim }) =>
-    dim ? theme.colors.grey : theme.colors.white};
+  ${({ fill }) => fill && `background-color: ${fill};`}
 `;
 
-export default ({ name, vote, hideVote, ...rest }) => (
+export default ({ name, vote, voted, hideVote, ...rest }) => (
   <Container {...rest}>
     <Label>{name}</Label>
-    <VoteBox dim={hideVote}>{hideVote ? '' : vote}</VoteBox>
+    {hideVote ? (
+      <VoteBox
+        fill={voted ? theme.colors.success : theme.colors.lightGrey}
+      ></VoteBox>
+    ) : (
+      <VoteBox>{vote}</VoteBox>
+    )}
   </Container>
 );

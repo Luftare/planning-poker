@@ -11,8 +11,10 @@ const Container = styled.div`
 `;
 
 const Option = styled.div`
-  background-color: ${({ active }) =>
-    active ? theme.colors.primary : theme.colors.lightGrey};
+  background-color: ${theme.colors.lightGrey};
+  box-sizing: border-box;
+  border: ${({ active }) =>
+    active ? `solid ${theme.colors.grey} 2px` : 'solid transparent 2px'};
   color: ${theme.colors.black};
   padding: 8px 16px;
   font-size: 24px;
