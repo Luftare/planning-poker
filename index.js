@@ -12,6 +12,7 @@ const io = require('socket.io')(http, {
 
 app.use('/api', api);
 app.use('/', express.static(__dirname + '/client/build'));
+app.use('*', express.static(__dirname + '/client/build'));
 
 api.get('/test', (req, res) => {
   res.json({ foo: 'bar' });
