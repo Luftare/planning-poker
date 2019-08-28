@@ -11,6 +11,7 @@ export default withRouter(props => {
   const [, setDeckIndex] = useGlobal('deckIndex');
   const [, setUsers] = useGlobal('users');
   const [, setRoomId] = useGlobal('roomId');
+  const [, setCurrentVoteTopic] = useGlobal('currentVoteTopic');
 
   useEffect(() => {
     socket.emit('DOES_ROOM_EXIST', roomId, exists => {
@@ -32,7 +33,17 @@ export default withRouter(props => {
         setDeckIndex(roomState.deckIndex);
         setUsers(roomState.users);
         setRoomId(roomState.id);
-        history.push(`/${roomState.id}`);
+        setCurrentVoteTopic(roomState.voteTopic);
+
+        const shouldVote = roomState.users.some(
+          u => !u.voted && u.name !== name
+        );
+
+        if (shouldVote) {
+          history.push(`/${roomState.id}/vote`);
+        } else {
+          history.push(`/${roomState.id}`);
+        }
       }
     });
   };

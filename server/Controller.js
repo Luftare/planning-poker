@@ -45,11 +45,11 @@ class Controller {
         }
       });
 
-      socket.on('VOTE', ({ vote, roomId }, callback) => {
+      socket.on('VOTE', ({ vote }, callback) => {
         if (room) {
           room.handleVote(socket.id, vote);
           callback(null, room.getState());
-          this.io.sockets.in(roomId).emit('ROOM_STATE', room.getState());
+          this.io.sockets.in(room.id).emit('ROOM_STATE', room.getState());
         } else {
           callback('Room not found.');
         }

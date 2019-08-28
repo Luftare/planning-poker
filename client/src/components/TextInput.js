@@ -7,6 +7,7 @@ export const TextInput = styled.input`
   padding: 4px;
   border: none;
   font-size: 24px;
-  max-width: 200px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2) inset;
+  width: 100%;
+  max-width: 400px;
 `;

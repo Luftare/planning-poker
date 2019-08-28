@@ -1,16 +1,25 @@
-import React, { useGlobal } from 'reactn';
+import React, { useGlobal, useEffect } from 'reactn';
 import { withRouter } from 'react-router-dom';
 import { CenteredPage } from '../components/Page';
 import Cards from '../components/Cards';
 import Title from '../components/Title';
 
 export default withRouter(props => {
-  const [roomId] = useGlobal('roomId');
+  const { socket } = props;
   const [, setUsers] = useGlobal('users');
-  const [currentVoteTopic] = useGlobal('currentVoteTopic');
+  const [currentVoteTopic, setCurrentVoteTopic] = useGlobal('currentVoteTopic');
+
+  useEffect(() => {
+    socket.on('START_VOTE', roomState => {
+      setCurrentVoteTopic(roomState.voteTopic);
+    });
+    return () => {
+      socket.removeAllListeners();
+    };
+  }, [socket, setUsers, setCurrentVoteTopic]);
 
   const handleCardSelection = vote => {
-    props.socket.emit('VOTE', { vote, roomId }, (err, roomState) => {
+    props.socket.emit('VOTE', { vote }, (err, roomState) => {
       if (err) {
         console.log(err);
         props.history.push(`/`);
@@ -24,7 +33,7 @@ export default withRouter(props => {
   return (
     <CenteredPage>
       <Title style={{ marginBottom: '32px' }}>
-        Vote{currentVoteTopic && `: ${currentVoteTopic}`}
+        {currentVoteTopic ? currentVoteTopic : 'Vote'}
       </Title>
       <Cards onSelect={handleCardSelection} />
     </CenteredPage>

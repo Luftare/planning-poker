@@ -19,8 +19,8 @@ export const theme = {
   colors: {
     primary: '#fdc500',
     black: '#000',
-    grey: '#999',
-    lightGrey: '#efefef',
+    grey: '#444',
+    lightGrey: '#f5f5f5',
     success: '#dfd',
     danger: '#faa',
     white: '#fff',

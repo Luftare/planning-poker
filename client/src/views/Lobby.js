@@ -12,6 +12,7 @@ const Header = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 `;
 
 export default withRouter(props => {
@@ -100,17 +101,17 @@ export default withRouter(props => {
             placeholder="Topic (optional)"
             value={nextVoteTopic}
             onChange={e => setNextVoteTopic(e.target.value)}
-            style={{ fontSize: '14px', display: 'block', marginTop: '32px' }}
+            style={{ display: 'block', marginTop: '32px' }}
           />
         )}
         {currentVoteTopic && (
           <>
             <Title style={{ margin: '16px 0' }}>
-              <span style={{ marginRight: facilitator ? '16px' : 0 }}>
-                Voting: {currentVoteTopic}
+              <span style={{ marginRight: facilitator ? '8px' : 0 }}>
+                {currentVoteTopic}
               </span>
               {facilitator && (
-                <SmallButton onClick={voteAgain}>Vote again</SmallButton>
+                <SmallButton onClick={voteAgain}>vote again</SmallButton>
               )}
             </Title>
           </>

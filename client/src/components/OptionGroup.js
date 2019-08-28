@@ -14,10 +14,11 @@ const Option = styled.div`
   background-color: ${theme.colors.lightGrey};
   box-sizing: border-box;
   border: ${({ active }) =>
-    active ? `solid ${theme.colors.grey} 2px` : 'solid transparent 2px'};
+    `solid ${active ? theme.colors.grey : 'transparent'} 1px`}
   color: ${theme.colors.black};
   padding: 8px 16px;
   font-size: 24px;
+  cursor: pointer;
 `;
 
 export const OptionGroup = ({ options, activeIndex, onChange }, ...rest) => {

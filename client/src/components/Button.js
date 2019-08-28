@@ -9,6 +9,7 @@ export const Button = styled.button`
   font-size: 24px;
   display: block;
   max-width: 200px;
+  cursor: pointer;
 `;
 
 export const SmallButton = styled(Button)`
