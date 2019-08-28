@@ -1,6 +1,8 @@
 import React, { useEffect, useGlobal } from 'reactn';
 import { withRouter } from 'react-router-dom';
 import { CenteredPage } from '../components/Page';
+import { TextInput } from '../components/TextInput';
+import { Button } from '../components/Button';
 
 export default withRouter(props => {
   const { socket, history } = props;
@@ -37,9 +39,12 @@ export default withRouter(props => {
 
   return (
     <CenteredPage>
-      <form onSubmit={handleLogin}>
-        <input onChange={e => setName(e.target.value)} />
-        <button type="submit">Join</button>
+      <form onSubmit={handleLogin} style={{ display: 'flex' }}>
+        <TextInput
+          onChange={e => setName(e.target.value)}
+          style={{ marginRight: '8px' }}
+        />
+        <Button type="submit">Join</Button>
       </form>
     </CenteredPage>
   );
