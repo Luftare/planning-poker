@@ -106,10 +106,12 @@ export default withRouter(props => {
         {currentVoteTopic && (
           <>
             <Title style={{ margin: '16px 0' }}>
-              <span style={{ marginRight: '16px' }}>
+              <span style={{ marginRight: facilitator ? '16px' : 0 }}>
                 Voting: {currentVoteTopic}
               </span>
-              <SmallButton onClick={voteAgain}>Vote again</SmallButton>
+              {facilitator && (
+                <SmallButton onClick={voteAgain}>Vote again</SmallButton>
+              )}
             </Title>
           </>
         )}
