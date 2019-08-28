@@ -21,27 +21,23 @@ export default withRouter(props => {
   const { roomId } = props.match.params;
 
   const [name] = useGlobal('name');
+  const [, setVoting] = useGlobal('voting');
+  const [stateRoomId] = useGlobal('roomId');
+  const isInRoom = !!stateRoomId;
   const [facilitator] = useGlobal('facilitator');
   const [currentVoteTopic, setCurrentVoteTopic] = useGlobal('currentVoteTopic');
   const [nextVoteTopic, setNextVoteTopic] = useGlobal('nextVoteTopic');
   const [, setUsers] = useGlobal('users');
 
   useEffect(() => {
-    socket.emit('ROOM_STATE', (err, roomState) => {
-      if (err) {
-        console.log(err);
-      } else {
-        setUsers(roomState.users);
-      }
-    });
-
-    if (!name && !facilitator) {
+    if (!isInRoom && !facilitator) {
       history.push(`/${roomId}/login`);
       return;
     }
 
     socket.on('ROOM_STATE', roomState => {
       setUsers(roomState.users);
+      setVoting(roomState.voting);
     });
 
     socket.on('QUIT_ROOM', () => {
@@ -63,9 +59,11 @@ export default withRouter(props => {
   }, [
     socket,
     setUsers,
+    setVoting,
     setCurrentVoteTopic,
     history,
     roomId,
+    isInRoom,
     name,
     facilitator,
   ]);

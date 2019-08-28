@@ -11,7 +11,7 @@ const Container = styled.div`
 
 export default ({ onRemoveUser, ...rest }) => {
   const [users] = useGlobal('users');
-  const hideVotes = users.some(user => !user.voted);
+  const [voting] = useGlobal('voting');
 
   return (
     <Container {...rest}>
@@ -21,7 +21,7 @@ export default ({ onRemoveUser, ...rest }) => {
           name={user.name}
           vote={user.vote}
           voted={user.voted}
-          hideVote={hideVotes}
+          hideVote={voting || !user.voted}
           canRemove={!!onRemoveUser}
           onRemove={() => onRemoveUser(user)}
         />

@@ -39,18 +39,21 @@ export default ({
   onRemove,
   canRemove,
   ...rest
-}) => (
-  <Container {...rest}>
-    <LabelContainer>
-      {canRemove && <RemoveButton onClick={onRemove}>x</RemoveButton>}
-      <Label>{name}</Label>
-    </LabelContainer>
-    {hideVote ? (
-      <VoteBox
-        fill={voted ? theme.colors.success : theme.colors.lightGrey}
-      ></VoteBox>
-    ) : (
-      <VoteBox>{vote}</VoteBox>
-    )}
-  </Container>
-);
+}) => {
+  // Yes, that ternary madness is crap
+  return (
+    <Container {...rest}>
+      <LabelContainer>
+        {canRemove && <RemoveButton onClick={onRemove}>x</RemoveButton>}
+        <Label>{name}</Label>
+      </LabelContainer>
+      {hideVote ? (
+        <VoteBox
+          fill={voted ? theme.colors.success : theme.colors.lightGrey}
+        ></VoteBox>
+      ) : (
+        <VoteBox>{vote}</VoteBox>
+      )}
+    </Container>
+  );
+};

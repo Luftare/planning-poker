@@ -8,6 +8,7 @@ export default withRouter(props => {
   const { socket, history } = props;
   const { roomId } = props.match.params;
   const [name, setName] = useGlobal('name');
+  const [, setVoting] = useGlobal('voting');
   const [, setDeckIndex] = useGlobal('deckIndex');
   const [, setUsers] = useGlobal('users');
   const [, setRoomId] = useGlobal('roomId');
@@ -24,6 +25,7 @@ export default withRouter(props => {
 
   const handleLogin = e => {
     e.preventDefault();
+    window.localStorage.setItem('voter-name', name);
 
     socket.emit('JOIN_ROOM', { id: roomId, name }, (err, roomState) => {
       if (err) {
@@ -34,6 +36,7 @@ export default withRouter(props => {
         setUsers(roomState.users);
         setRoomId(roomState.id);
         setCurrentVoteTopic(roomState.voteTopic);
+        setVoting(roomState.voting);
 
         if (roomState.voting) {
           history.push(`/${roomState.id}/vote`);
@@ -51,6 +54,7 @@ export default withRouter(props => {
           placeholder="Name"
           onChange={e => setName(e.target.value)}
           style={{ marginRight: '8px' }}
+          value={name}
         />
         <Button type="submit">Join</Button>
       </form>

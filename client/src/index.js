@@ -10,13 +10,14 @@ const socketUrl =
 const socket = io(socketUrl);
 
 setGlobal({
-  name: '',
+  name: window.localStorage.getItem('voter-name') || '',
   facilitator: false,
   roomId: '',
   users: [],
   deckIndex: 0,
   nextVoteTopic: '',
   currentVoteTopic: '',
+  voting: false,
   decks: [
     {
       label: 'T-shirt',

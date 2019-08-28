@@ -3,7 +3,7 @@ module.exports = class User {
     this.name = name;
     this.id = id;
     this.voted = false;
-    this.vote = 0;
+    this.vote = null;
   }
 
   handleVote(vote) {
