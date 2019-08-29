@@ -4,6 +4,7 @@ module.exports = class User {
     this.id = id;
     this.voted = false;
     this.vote = null;
+    this.facilitator = false;
   }
 
   handleVote(vote) {

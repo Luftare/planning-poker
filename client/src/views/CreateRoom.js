@@ -6,10 +6,13 @@ import { CenteredPage } from '../components/Page';
 
 export default withRouter(props => {
   const { socket, history } = props;
+  const { roomId } = props.match.params;
   const [deckIndex, setDeckIndex] = useGlobal('deckIndex');
   const [, setFacilitator] = useGlobal('facilitator');
   const [, setRoomId] = useGlobal('roomId');
   const [decks] = useGlobal('decks');
+  const [name] = useGlobal('name');
+  const [, setUsers] = useGlobal('users');
 
   const handleClick = () => {
     setFacilitator(true);
@@ -18,10 +21,17 @@ export default withRouter(props => {
       'CREATE_ROOM',
       {
         deckIndex,
+        roomId,
+        facilitatorName: name,
       },
-      roomState => {
-        setRoomId(roomState.id);
-        history.push(`/${roomState.id}`);
+      (err, roomState) => {
+        if (err) {
+          console.log(err);
+        } else {
+          setRoomId(roomState.id);
+          setUsers(roomState.users);
+          history.push(`/${roomState.id}`);
+        }
       }
     );
   };
@@ -35,7 +45,7 @@ export default withRouter(props => {
       />
       <Button onClick={handleClick} style={{ marginTop: '24px' }}>
         Create room
-      </Button>{' '}
+      </Button>
     </CenteredPage>
   );
 });

@@ -1,4 +1,4 @@
-import React, { useEffect, useGlobal } from 'reactn';
+import React, { useEffect, useState, useGlobal } from 'reactn';
 import styled from 'styled-components';
 import { withRouter, Link } from 'react-router-dom';
 import { theme } from '../styles';
@@ -24,10 +24,11 @@ export default withRouter(props => {
   const [, setVoting] = useGlobal('voting');
   const [stateRoomId] = useGlobal('roomId');
   const isInRoom = !!stateRoomId;
-  const [facilitator] = useGlobal('facilitator');
+  const [facilitator, setFacilitator] = useGlobal('facilitator');
   const [currentVoteTopic, setCurrentVoteTopic] = useGlobal('currentVoteTopic');
   const [nextVoteTopic, setNextVoteTopic] = useGlobal('nextVoteTopic');
   const [, setUsers] = useGlobal('users');
+  const [editUsers, setEditUsers] = useState(false);
 
   useEffect(() => {
     if (!isInRoom && !facilitator) {
@@ -38,10 +39,13 @@ export default withRouter(props => {
     socket.on('ROOM_STATE', roomState => {
       setUsers(roomState.users);
       setVoting(roomState.voting);
+      const self = roomState.users.find(u => u.id === socket.id);
+      const selfIsFacilitator = self && self.facilitator;
+      setFacilitator(selfIsFacilitator);
     });
 
     socket.on('QUIT_ROOM', () => {
-      console.log('Facilitator disconnected.');
+      console.log('Disconnected from room.');
       history.push('/');
     });
 
@@ -60,6 +64,7 @@ export default withRouter(props => {
     socket,
     setUsers,
     setVoting,
+    setFacilitator,
     setCurrentVoteTopic,
     history,
     roomId,
@@ -70,6 +75,15 @@ export default withRouter(props => {
 
   const removeUser = user => {
     socket.emit('KICK_USER', user.id);
+  };
+
+  const assignUserToFacilitator = user => {
+    socket.emit('ASSIGN_USER_TO_FACILITATOR', user.id);
+    setEditUsers(false);
+
+    if (!name) {
+      history.push(`/${roomId}/login`);
+    }
   };
 
   const voteAgain = () => {
@@ -83,7 +97,8 @@ export default withRouter(props => {
     });
   };
 
-  const startVote = () => {
+  const startVote = e => {
+    e.preventDefault();
     socket.emit('START_VOTE', nextVoteTopic, (err, roomState) => {
       if (err) {
         console.log(err);
@@ -93,6 +108,18 @@ export default withRouter(props => {
       }
     });
   };
+
+  const votingControls = (
+    <form style={{ display: 'flex' }} onSubmit={startVote}>
+      <TextInput
+        placeholder="New topic (optional)"
+        value={nextVoteTopic}
+        onChange={e => setNextVoteTopic(e.target.value)}
+        style={{ marginRight: '8px' }}
+      />
+      <Button onClick={startVote}>Vote</Button>
+    </form>
+  );
 
   return (
     <CenteredPage
@@ -114,15 +141,7 @@ export default withRouter(props => {
       </Link>
       <Header>
         <CopyLink>{window.location.href}</CopyLink>
-        {facilitator && (
-          <TextInput
-            placeholder="Topic (optional)"
-            value={nextVoteTopic}
-            onChange={e => setNextVoteTopic(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && startVote()}
-            style={{ display: 'block', marginTop: '32px' }}
-          />
-        )}
+
         {currentVoteTopic && (
           <>
             <Title style={{ margin: '32px 0' }}>
@@ -138,10 +157,14 @@ export default withRouter(props => {
       </Header>
       <Users
         style={{ marginTop: facilitator ? 0 : '32px' }}
-        onRemoveUser={facilitator && (user => removeUser(user))}
+        editMode={editUsers}
+        onToggleEdit={() => setEditUsers(!editUsers)}
+        onRemoveUser={user => removeUser(user)}
+        onAssignToFacilitator={user => assignUserToFacilitator(user)}
+        showControls={editUsers}
+        facilitator={facilitator}
       />
-
-      {facilitator && <Button onClick={startVote}>Start vote</Button>}
+      {facilitator && votingControls}
     </CenteredPage>
   );
 });

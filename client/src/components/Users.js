@@ -1,6 +1,7 @@
 import React, { useGlobal } from 'reactn';
 import styled from 'styled-components';
 import User from './User';
+import Facilitator from './Facilitator';
 
 const Container = styled.div`
   display: grid;
@@ -9,24 +10,45 @@ const Container = styled.div`
   max-width: 250px;
 `;
 
-export default ({ onRemoveUser, ...rest }) => {
+export default ({
+  onRemoveUser,
+  onAssignToFacilitator,
+  showControls,
+  onToggleEdit,
+  editMode,
+  ...rest
+}) => {
   const [users] = useGlobal('users');
   const [voting] = useGlobal('voting');
+  const [facilitator] = useGlobal('facilitator');
+  const voters = users.filter(u => !u.facilitator);
+  const facilitatorUser = users.find(u => u.facilitator);
 
   return (
     <Container {...rest}>
-      {users.map(user => (
+      {facilitatorUser && (
+        <Facilitator
+          name={facilitatorUser.name}
+          style={{ marginBottom: '24px' }}
+          onToggleEdit={onToggleEdit}
+          editMode={editMode}
+          showControls={showControls}
+          facilitator={facilitator}
+        />
+      )}
+      {voters.map(user => (
         <User
           key={user.name}
           name={user.name}
           vote={user.vote}
           voted={user.voted}
           hideVote={voting || !user.voted}
-          canRemove={!!onRemoveUser}
+          showControls={facilitator && showControls}
           onRemove={() => onRemoveUser(user)}
+          onAssignToFacilitator={() => onAssignToFacilitator(user)}
         />
       ))}
-      {users.length === 0 && (
+      {voters.length === 0 && (
         <div style={{ textAlign: 'center' }}>Waiting for voters...</div>
       )}
     </Container>

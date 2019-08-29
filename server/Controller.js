@@ -12,13 +12,21 @@ class Controller {
     this.io.sockets.on('connection', socket => {
       let room;
 
-      socket.on('CREATE_ROOM', ({ deckIndex }, onSuccess) => {
-        room = new Room({ deckIndex, facilitatorId: socket.id });
-        this.rooms[room.id] = room;
+      socket.on(
+        'CREATE_ROOM',
+        ({ deckIndex, facilitatorName, roomId }, callback) => {
+          if (this.rooms[roomId]) {
+            callback('Room already exists.');
+          } else {
+            room = new Room({ deckIndex, roomId });
+            room.addUser(facilitatorName, socket.id);
+            this.rooms[room.id] = room;
 
-        socket.join(room.id);
-        onSuccess(room.getState());
-      });
+            socket.join(room.id);
+            callback(null, room.getState());
+          }
+        }
+      );
 
       socket.on('DOES_ROOM_EXIST', (roomId, callback) => {
         callback(!!this.rooms[roomId]);
@@ -28,6 +36,13 @@ class Controller {
         if (room) {
           room.removeUser(userId);
           this.io.sockets.to(userId).emit('QUIT_ROOM');
+          this.io.sockets.in(room.id).emit('ROOM_STATE', room.getState());
+        }
+      });
+
+      socket.on('ASSIGN_USER_TO_FACILITATOR', id => {
+        if (room) {
+          room.assignFacilitator(id);
           this.io.sockets.in(room.id).emit('ROOM_STATE', room.getState());
         }
       });
@@ -77,13 +92,12 @@ class Controller {
 
       socket.on('disconnect', () => {
         if (room) {
-          if (room.facilitatorId === socket.id) {
-            delete this.rooms[room.id];
-            this.io.sockets.in(room.id).emit('QUIT_ROOM');
-          }
-
           room.removeUser(socket.id);
-          this.io.sockets.in(room.id).emit('ROOM_STATE', room.getState());
+          if (room.users.length === 0) {
+            delete this.rooms[room.id];
+          } else {
+            this.io.sockets.in(room.id).emit('ROOM_STATE', room.getState());
+          }
         }
       });
     });

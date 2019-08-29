@@ -1,7 +1,8 @@
-import React, { useEffect, useGlobal } from 'reactn';
+import React, { useEffect, useState, useGlobal } from 'reactn';
 import { withRouter } from 'react-router-dom';
 import { CenteredPage } from '../components/Page';
 import { TextInput } from '../components/TextInput';
+import Title from '../components/Title';
 import { Button } from '../components/Button';
 
 export default withRouter(props => {
@@ -14,19 +15,26 @@ export default withRouter(props => {
   const [, setRoomId] = useGlobal('roomId');
   const [, setCurrentVoteTopic] = useGlobal('currentVoteTopic');
 
+  const [roomExists, setRoomExists] = useState(false);
+
   useEffect(() => {
     socket.emit('DOES_ROOM_EXIST', roomId, exists => {
-      if (!exists) {
-        console.log('Room does not exist.');
-        history.push(`/`);
-      }
+      setRoomExists(exists);
     });
-  }, [socket, roomId, history]);
+  }, [socket, roomId, setRoomExists]);
 
-  const handleLogin = e => {
+  const handleSubmit = e => {
     e.preventDefault();
     window.localStorage.setItem('voter-name', name);
 
+    if (roomExists) {
+      joinRoom();
+    } else {
+      createRoom();
+    }
+  };
+
+  const joinRoom = () => {
     socket.emit('JOIN_ROOM', { id: roomId, name }, (err, roomState) => {
       if (err) {
         console.log(err);
@@ -47,16 +55,21 @@ export default withRouter(props => {
     });
   };
 
+  const createRoom = () => {
+    history.push(`/${roomId}/create`);
+  };
+
   return (
     <CenteredPage>
-      <form onSubmit={handleLogin} style={{ display: 'flex' }}>
+      <Title style={{ marginBottom: '32px' }}>{roomId}</Title>
+      <form onSubmit={handleSubmit} style={{ display: 'flex' }}>
         <TextInput
           placeholder="Name"
           onChange={e => setName(e.target.value)}
           style={{ marginRight: '8px' }}
           value={name}
         />
-        <Button type="submit">Join</Button>
+        <Button type="submit">{roomExists ? 'Join' : 'Create'}</Button>
       </form>
     </CenteredPage>
   );

@@ -1,5 +1,6 @@
 import React from 'reactn';
 import styled from 'styled-components';
+import { FaBan, FaCrown } from 'react-icons/fa';
 import { theme } from '../styles';
 
 const Container = styled.div`
@@ -16,12 +17,7 @@ const Label = styled.span`
   font-size: 24px;
   color: ${theme.colors.grey};
 `;
-const RemoveButton = styled.span`
-  color: ${theme.colors.danger};
-  margin-right: 16px;
-  fontsize: 26px;
-  cursor: pointer;
-`;
+
 const VoteBox = styled.span`
   font-size: 24px;
   display: inline-block;
@@ -37,14 +33,37 @@ export default ({
   voted,
   hideVote,
   onRemove,
-  canRemove,
+  onAssignToFacilitator,
+  showControls,
   ...rest
 }) => {
   // Yes, that ternary madness is crap
+
+  const controls = showControls && (
+    <>
+      <FaBan
+        onClick={onRemove}
+        size="24px"
+        color={theme.colors.danger}
+        style={{ marginRight: '16px', cursor: 'pointer' }}
+      >
+        x
+      </FaBan>
+      <FaCrown
+        onClick={onAssignToFacilitator}
+        size="24px"
+        color={theme.colors.primary}
+        style={{ marginRight: '16px', cursor: 'pointer' }}
+      >
+        sm
+      </FaCrown>
+    </>
+  );
+
   return (
     <Container {...rest}>
       <LabelContainer>
-        {canRemove && <RemoveButton onClick={onRemove}>x</RemoveButton>}
+        {controls}
         <Label>{name}</Label>
       </LabelContainer>
       {hideVote ? (
