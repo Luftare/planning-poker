@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useGlobal } from 'reactn';
 import { withRouter } from 'react-router-dom';
+import { FaComments } from 'react-icons/fa';
 import { CenteredPage } from '../components/Page';
 import { TextInput } from '../components/TextInput';
 import Title from '../components/Title';
 import { Button } from '../components/Button';
+import { theme } from '../styles';
 
 export default withRouter(props => {
   const { socket, history } = props;
@@ -61,7 +63,10 @@ export default withRouter(props => {
 
   return (
     <CenteredPage>
-      <Title style={{ marginBottom: '32px' }}>{roomId}</Title>
+      <Title style={{ marginBottom: '32px' }}>
+        <FaComments style={{ marginRight: '12px' }} color={theme.colors.grey} />{' '}
+        {roomId}
+      </Title>
       <form onSubmit={handleSubmit} style={{ display: 'flex' }}>
         <TextInput
           placeholder="Name"

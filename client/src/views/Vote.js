@@ -31,7 +31,6 @@ export default withRouter(props => {
       const self = roomState.users.find(u => u.id === socket.id);
       const selfIsFacilitator = self && self.facilitator;
       setFacilitator(selfIsFacilitator);
-      console.log('voting:', roomState.voting);
     });
     return () => {
       socket.removeAllListeners();

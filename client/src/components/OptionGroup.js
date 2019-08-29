@@ -27,11 +27,11 @@ export const OptionGroup = ({ options, activeIndex, onChange, ...rest }) => {
     <Container {...rest}>
       {options.map((option, index) => (
         <Option
-          key={option}
+          key={option.value}
           active={activeIndex === index}
           onClick={() => activeIndex !== index && onChange && onChange(index)}
         >
-          {option}
+          {option.label}
         </Option>
       ))}
     </Container>

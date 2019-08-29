@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useGlobal } from 'reactn';
 import styled from 'styled-components';
 import { withRouter, Link } from 'react-router-dom';
-import { FaQrcode, FaCog } from 'react-icons/fa';
+import { FaQrcode, FaCog, FaRedoAlt } from 'react-icons/fa';
 import { theme } from '../styles';
 import { CenteredPage } from '../components/Page';
-import { Button, SmallButton } from '../components/Button';
+import { Button } from '../components/Button';
 import Users from '../components/Users';
 import Title from '../components/Title';
 import CopyLink from '../components/CopyLink';
@@ -88,7 +88,7 @@ export default withRouter(props => {
   const voteAgain = () => {
     socket.emit(
       'START_VOTE',
-      { currentVoteTopic, deckIndex },
+      { voteTopic: currentVoteTopic, deckIndex },
       (err, roomState) => {
         if (err) {
           console.log(err);
@@ -102,9 +102,10 @@ export default withRouter(props => {
 
   const startVote = e => {
     e.preventDefault();
+
     socket.emit(
       'START_VOTE',
-      { nextVoteTopic, deckIndex },
+      { voteTopic: nextVoteTopic, deckIndex },
       (err, roomState) => {
         if (err) {
           console.log(err);
@@ -170,7 +171,14 @@ export default withRouter(props => {
                 {currentVoteTopic}
               </span>
               {facilitator && (
-                <SmallButton onClick={voteAgain}>vote again</SmallButton>
+                <FaRedoAlt
+                  onClick={voteAgain}
+                  size="18px"
+                  color={theme.colors.grey}
+                  style={{ cursor: 'pointer' }}
+                >
+                  vote again
+                </FaRedoAlt>
               )}
             </Title>
           </>
