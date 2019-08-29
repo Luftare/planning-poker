@@ -2,6 +2,7 @@ import React, { useGlobal, useEffect, useState } from 'reactn';
 import { withRouter } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { CenteredPage } from '../components/Page';
+import Title from '../components/Title';
 import DeckSelector from '../components/DeckSelector';
 import { TextInput } from '../components/TextInput';
 import FormLabel from '../components/FormLabel';
@@ -64,6 +65,7 @@ export default withRouter(props => {
   return (
     <CenteredPage>
       <div>
+        <Title>Create room</Title>
         <form
           onSubmit={handleSubmit}
           style={{ display: 'block', maxWidth: '300px', marginTop: '24px' }}

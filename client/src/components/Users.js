@@ -26,7 +26,7 @@ export default ({
 
   return (
     <Container {...rest}>
-      {facilitatorUser && (
+      {facilitatorUser && !showControls && (
         <Facilitator
           name={facilitatorUser.name}
           style={{ marginBottom: '24px' }}
@@ -48,7 +48,7 @@ export default ({
           onAssignToFacilitator={() => onAssignToFacilitator(user)}
         />
       ))}
-      {voters.length === 0 && (
+      {voters.length === 0 && !showControls && (
         <div style={{ textAlign: 'center' }}>Waiting for voters...</div>
       )}
     </Container>

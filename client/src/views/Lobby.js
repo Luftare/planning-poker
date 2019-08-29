@@ -10,6 +10,7 @@ import Title from '../components/Title';
 import CopyLink from '../components/CopyLink';
 import { TextInput } from '../components/TextInput';
 import DeckSelector from '../components/DeckSelector';
+import FormLabel from '../components/FormLabel';
 
 const Header = styled.div`
   display: flex;
@@ -42,7 +43,6 @@ export default withRouter(props => {
 
     socket.emit('DOES_ROOM_EXIST', roomId, (err, exists) => {
       if (exists) {
-        console.log(name);
         if (!name) {
           history.push(`/${roomId}/login`);
         }
@@ -197,18 +197,27 @@ export default withRouter(props => {
           </>
         )}
       </Header>
-      <Users
-        style={{ marginTop: facilitator ? 0 : '32px' }}
-        editMode={editMode}
-        onRemoveUser={user => removeUser(user)}
-        onAssignToFacilitator={user => assignUserToFacilitator(user)}
-        showControls={editMode}
-        facilitator={facilitator}
-      />
-      {facilitator && editMode && (
-        <DeckSelector style={{ marginTop: '64px' }} />
-      )}
-      {facilitator && !editMode && votingControls}
+      <div>
+        {editMode && <FormLabel>Voters</FormLabel>}
+        <Users
+          style={{
+            marginTop: facilitator ? 0 : '32px',
+            marginBottom: editMode ? '32px' : 0,
+          }}
+          editMode={editMode}
+          onRemoveUser={user => removeUser(user)}
+          onAssignToFacilitator={user => assignUserToFacilitator(user)}
+          showControls={editMode}
+          facilitator={facilitator}
+        />
+        {facilitator && editMode && (
+          <>
+            <FormLabel>Deck type</FormLabel>
+            <DeckSelector style={{ marginTop: '64px' }} />
+          </>
+        )}
+      </div>
+      {(facilitator && !editMode && votingControls) || <span></span>}
     </CenteredPage>
   );
 });
