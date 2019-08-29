@@ -9,8 +9,9 @@ export const TextInput = styled.input`
   border: none;
   font-size: 20px;
   width: 100%;
-  max-width: 400px;
+  max-width: 300px;
   border: 1px solid ${theme.colors.grey};
+  box-sizing: border-box;
 
   :focus {
     border: 1px solid #fdc500;

@@ -22,7 +22,7 @@ export const theme = {
     grey: '#898989',
     lightGrey: '#f9f9f9',
     success: '#dfd',
-    danger: '#faa',
+    danger: '#d44',
     white: '#fff',
   },
   shadow: '2px 2px 3px 0 rgba(0, 0, 0, 0.05)',

@@ -23,21 +23,34 @@ export default withRouter(props => {
   const { roomId } = props.match.params;
 
   const [name] = useGlobal('name');
+  const [, setError] = useGlobal('error');
   const [, setVoting] = useGlobal('voting');
-  const [stateRoomId] = useGlobal('roomId');
   const [deckIndex, setDeckIndex] = useGlobal('deckIndex');
-  const isInRoom = !!stateRoomId;
   const [facilitator, setFacilitator] = useGlobal('facilitator');
   const [currentVoteTopic, setCurrentVoteTopic] = useGlobal('currentVoteTopic');
   const [nextVoteTopic, setNextVoteTopic] = useGlobal('nextVoteTopic');
-  const [, setUsers] = useGlobal('users');
+  const [users, setUsers] = useGlobal('users');
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
-    if (!isInRoom && !facilitator) {
+    const userInRoom = users.find(u => u.id === socket.id);
+
+    if (!userInRoom) {
       history.push(`/${roomId}/login`);
       return;
     }
+
+    socket.emit('DOES_ROOM_EXIST', roomId, (err, exists) => {
+      if (exists) {
+        console.log(name);
+        if (!name) {
+          history.push(`/${roomId}/login`);
+        }
+      } else {
+        setError('Room not found.');
+        history.push('/');
+      }
+    });
 
     socket.on('ROOM_STATE', roomState => {
       setUsers(roomState.users);
@@ -50,7 +63,7 @@ export default withRouter(props => {
     });
 
     socket.on('QUIT_ROOM', () => {
-      console.log('Disconnected from room.');
+      setError('Disconnected from room.');
       history.push('/');
     });
 
@@ -91,7 +104,7 @@ export default withRouter(props => {
       { voteTopic: currentVoteTopic, deckIndex },
       (err, roomState) => {
         if (err) {
-          console.log(err);
+          setError(err);
         } else {
           setNextVoteTopic('');
           setUsers(roomState.users);
@@ -108,7 +121,7 @@ export default withRouter(props => {
       { voteTopic: nextVoteTopic, deckIndex },
       (err, roomState) => {
         if (err) {
-          console.log(err);
+          setError(err);
         } else {
           setNextVoteTopic('');
           setUsers(roomState.users);

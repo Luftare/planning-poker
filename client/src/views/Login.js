@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useGlobal } from 'reactn';
+import React, { useEffect, useGlobal } from 'reactn';
 import { withRouter } from 'react-router-dom';
 import { FaComments } from 'react-icons/fa';
 import { CenteredPage } from '../components/Page';
@@ -11,17 +11,20 @@ export default withRouter(props => {
   const { socket, history } = props;
   const { roomId } = props.match.params;
   const [name, setName] = useGlobal('name');
+  const [, setError] = useGlobal('error');
   const [, setVoting] = useGlobal('voting');
   const [, setDeckIndex] = useGlobal('deckIndex');
   const [, setUsers] = useGlobal('users');
   const [, setRoomId] = useGlobal('roomId');
   const [, setCurrentVoteTopic] = useGlobal('currentVoteTopic');
 
-  const [roomExists, setRoomExists] = useState(false);
-
   useEffect(() => {
-    socket.emit('DOES_ROOM_EXIST', roomId, exists => {
-      setRoomExists(exists);
+    const id = roomId || '';
+    socket.emit('DOES_ROOM_EXIST', id, (err, exists) => {
+      if (!exists) {
+        setError('Room not found.');
+        history.push('/');
+      }
     });
     // eslint-disable-next-line
   }, []);
@@ -30,17 +33,13 @@ export default withRouter(props => {
     e.preventDefault();
     window.localStorage.setItem('voter-name', name);
 
-    if (roomExists) {
-      joinRoom();
-    } else {
-      createRoom();
-    }
+    joinRoom();
   };
 
   const joinRoom = () => {
     socket.emit('JOIN_ROOM', { id: roomId, name }, (err, roomState) => {
       if (err) {
-        console.log(err);
+        setError(err);
       } else {
         setDeckIndex(roomState.deckIndex);
         setUsers(roomState.users);
@@ -57,10 +56,6 @@ export default withRouter(props => {
     });
   };
 
-  const createRoom = () => {
-    history.push(`/${roomId}/create`);
-  };
-
   return (
     <CenteredPage>
       <Title style={{ marginBottom: '32px' }}>
@@ -74,7 +69,7 @@ export default withRouter(props => {
           style={{ marginRight: '8px' }}
           value={name}
         />
-        <Button type="submit">{roomExists ? 'Join' : 'Next'}</Button>
+        <Button type="submit">Join</Button>
       </form>
     </CenteredPage>
   );

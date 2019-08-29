@@ -16,6 +16,11 @@ export const Button = styled.button`
   :hover {
     background-color: #ffb700;
   }
+
+  :disabled {
+    background-color: ${theme.colors.lightGrey};
+    color: ${theme.colors.grey};
+  }
 `;
 
 export const SmallButton = styled(Button)`

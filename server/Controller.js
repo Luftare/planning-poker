@@ -1,3 +1,4 @@
+const shortid = require('shortid');
 const Room = require('./Room');
 
 class Controller {
@@ -11,6 +12,10 @@ class Controller {
   setupSocketHandlers() {
     this.io.sockets.on('connection', socket => {
       let room;
+
+      socket.on('REQUEST_NEW_ROOM_ID', callback => {
+        callback(null, shortid.generate());
+      });
 
       socket.on(
         'CREATE_ROOM',
@@ -29,7 +34,7 @@ class Controller {
       );
 
       socket.on('DOES_ROOM_EXIST', (roomId, callback) => {
-        callback(!!this.rooms[roomId]);
+        callback(null, !!this.rooms[roomId]);
       });
 
       socket.on('KICK_USER', userId => {
