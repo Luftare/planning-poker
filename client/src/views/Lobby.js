@@ -197,7 +197,7 @@ export default withRouter(props => {
           </>
         )}
       </Header>
-      <div>
+      <div style={{ width: '300px' }}>
         {editMode && <FormLabel>Voters</FormLabel>}
         <Users
           style={{
