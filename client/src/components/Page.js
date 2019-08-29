@@ -7,6 +7,7 @@ export const Page = styled.div`
   padding: 0 16px;
   background-color: ${theme.colors.white};
   box-sizing: border-box;
+  max-height: 100vh;
 `;
 
 export const CenteredPage = styled(Page)`

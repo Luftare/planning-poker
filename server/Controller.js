@@ -73,8 +73,9 @@ class Controller {
         }
       });
 
-      socket.on('START_VOTE', (voteTopic, callback) => {
+      socket.on('START_VOTE', ({ voteTopic, deckIndex }, callback) => {
         if (room) {
+          room.deckIndex = deckIndex;
           room.voteTopic = voteTopic;
           room.voting = true;
           room.startVoting();

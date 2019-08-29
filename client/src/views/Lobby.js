@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useGlobal } from 'reactn';
 import styled from 'styled-components';
 import { withRouter, Link } from 'react-router-dom';
+import { FaQrcode, FaCog } from 'react-icons/fa';
 import { theme } from '../styles';
 import { CenteredPage } from '../components/Page';
 import { Button, SmallButton } from '../components/Button';
@@ -8,6 +9,7 @@ import Users from '../components/Users';
 import Title from '../components/Title';
 import CopyLink from '../components/CopyLink';
 import { TextInput } from '../components/TextInput';
+import DeckSelector from '../components/DeckSelector';
 
 const Header = styled.div`
   display: flex;
@@ -23,12 +25,13 @@ export default withRouter(props => {
   const [name] = useGlobal('name');
   const [, setVoting] = useGlobal('voting');
   const [stateRoomId] = useGlobal('roomId');
+  const [deckIndex, setDeckIndex] = useGlobal('deckIndex');
   const isInRoom = !!stateRoomId;
   const [facilitator, setFacilitator] = useGlobal('facilitator');
   const [currentVoteTopic, setCurrentVoteTopic] = useGlobal('currentVoteTopic');
   const [nextVoteTopic, setNextVoteTopic] = useGlobal('nextVoteTopic');
   const [, setUsers] = useGlobal('users');
-  const [editUsers, setEditUsers] = useState(false);
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     if (!isInRoom && !facilitator) {
@@ -39,9 +42,11 @@ export default withRouter(props => {
     socket.on('ROOM_STATE', roomState => {
       setUsers(roomState.users);
       setVoting(roomState.voting);
+      setDeckIndex(roomState.deckIndex);
+
       const self = roomState.users.find(u => u.id === socket.id);
-      const selfIsFacilitator = self && self.facilitator;
-      setFacilitator(selfIsFacilitator);
+      const facilitator = self && self.facilitator;
+      setFacilitator(facilitator);
     });
 
     socket.on('QUIT_ROOM', () => {
@@ -52,6 +57,10 @@ export default withRouter(props => {
     socket.on('START_VOTE', roomState => {
       setUsers(roomState.users);
       setCurrentVoteTopic(roomState.voteTopic);
+      setDeckIndex(roomState.deckIndex);
+      const self = roomState.users.find(u => u.id === socket.id);
+      const facilitator = self && self.facilitator;
+      setFacilitator(facilitator);
 
       if (!facilitator) {
         history.push(`/${roomId}/vote`);
@@ -60,18 +69,8 @@ export default withRouter(props => {
     return () => {
       socket.removeAllListeners();
     };
-  }, [
-    socket,
-    setUsers,
-    setVoting,
-    setFacilitator,
-    setCurrentVoteTopic,
-    history,
-    roomId,
-    isInRoom,
-    name,
-    facilitator,
-  ]);
+    // eslint-disable-next-line
+  }, []);
 
   const removeUser = user => {
     socket.emit('KICK_USER', user.id);
@@ -79,7 +78,7 @@ export default withRouter(props => {
 
   const assignUserToFacilitator = user => {
     socket.emit('ASSIGN_USER_TO_FACILITATOR', user.id);
-    setEditUsers(false);
+    setEditMode(false);
 
     if (!name) {
       history.push(`/${roomId}/login`);
@@ -87,26 +86,34 @@ export default withRouter(props => {
   };
 
   const voteAgain = () => {
-    socket.emit('START_VOTE', currentVoteTopic, (err, roomState) => {
-      if (err) {
-        console.log(err);
-      } else {
-        setNextVoteTopic('');
-        setUsers(roomState.users);
+    socket.emit(
+      'START_VOTE',
+      { currentVoteTopic, deckIndex },
+      (err, roomState) => {
+        if (err) {
+          console.log(err);
+        } else {
+          setNextVoteTopic('');
+          setUsers(roomState.users);
+        }
       }
-    });
+    );
   };
 
   const startVote = e => {
     e.preventDefault();
-    socket.emit('START_VOTE', nextVoteTopic, (err, roomState) => {
-      if (err) {
-        console.log(err);
-      } else {
-        setNextVoteTopic('');
-        setUsers(roomState.users);
+    socket.emit(
+      'START_VOTE',
+      { nextVoteTopic, deckIndex },
+      (err, roomState) => {
+        if (err) {
+          console.log(err);
+        } else {
+          setNextVoteTopic('');
+          setUsers(roomState.users);
+        }
       }
-    });
+    );
   };
 
   const votingControls = (
@@ -117,7 +124,7 @@ export default withRouter(props => {
         onChange={e => setNextVoteTopic(e.target.value)}
         style={{ marginRight: '8px' }}
       />
-      <Button onClick={startVote}>Vote</Button>
+      <Button type="submit">Vote</Button>
     </form>
   );
 
@@ -137,8 +144,22 @@ export default withRouter(props => {
           color: theme.colors.grey,
         }}
       >
-        QR
+        <FaQrcode size="18px" />
       </Link>
+
+      {facilitator && (
+        <FaCog
+          style={{
+            position: 'absolute',
+            top: '8px',
+            right: '8px',
+            cursor: 'pointer',
+          }}
+          size="18px"
+          onClick={() => setEditMode(!editMode)}
+          color={editMode ? theme.colors.primary : theme.colors.grey}
+        />
+      )}
       <Header>
         <CopyLink>{window.location.href}</CopyLink>
 
@@ -157,14 +178,16 @@ export default withRouter(props => {
       </Header>
       <Users
         style={{ marginTop: facilitator ? 0 : '32px' }}
-        editMode={editUsers}
-        onToggleEdit={() => setEditUsers(!editUsers)}
+        editMode={editMode}
         onRemoveUser={user => removeUser(user)}
         onAssignToFacilitator={user => assignUserToFacilitator(user)}
-        showControls={editUsers}
+        showControls={editMode}
         facilitator={facilitator}
       />
-      {facilitator && votingControls}
+      {facilitator && editMode && (
+        <DeckSelector style={{ marginTop: '64px' }} />
+      )}
+      {facilitator && !editMode && votingControls}
     </CenteredPage>
   );
 });

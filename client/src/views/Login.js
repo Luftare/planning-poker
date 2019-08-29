@@ -21,7 +21,8 @@ export default withRouter(props => {
     socket.emit('DOES_ROOM_EXIST', roomId, exists => {
       setRoomExists(exists);
     });
-  }, [socket, roomId, setRoomExists]);
+    // eslint-disable-next-line
+  }, []);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -38,7 +39,6 @@ export default withRouter(props => {
     socket.emit('JOIN_ROOM', { id: roomId, name }, (err, roomState) => {
       if (err) {
         console.log(err);
-        // history.push(`/`);
       } else {
         setDeckIndex(roomState.deckIndex);
         setUsers(roomState.users);
@@ -69,7 +69,7 @@ export default withRouter(props => {
           style={{ marginRight: '8px' }}
           value={name}
         />
-        <Button type="submit">{roomExists ? 'Join' : 'Create'}</Button>
+        <Button type="submit">{roomExists ? 'Join' : 'Next'}</Button>
       </form>
     </CenteredPage>
   );

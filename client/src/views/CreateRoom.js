@@ -1,16 +1,15 @@
 import React, { useGlobal } from 'reactn';
 import { withRouter } from 'react-router-dom';
 import { Button } from '../components/Button';
-import { OptionGroup } from '../components/OptionGroup';
 import { CenteredPage } from '../components/Page';
+import DeckSelector from '../components/DeckSelector';
 
 export default withRouter(props => {
   const { socket, history } = props;
   const { roomId } = props.match.params;
-  const [deckIndex, setDeckIndex] = useGlobal('deckIndex');
+  const [deckIndex] = useGlobal('deckIndex');
   const [, setFacilitator] = useGlobal('facilitator');
   const [, setRoomId] = useGlobal('roomId');
-  const [decks] = useGlobal('decks');
   const [name] = useGlobal('name');
   const [, setUsers] = useGlobal('users');
 
@@ -39,11 +38,7 @@ export default withRouter(props => {
 
   return (
     <CenteredPage>
-      <OptionGroup
-        options={decks.map(deck => deck.label)}
-        activeIndex={deckIndex}
-        onChange={setDeckIndex}
-      />
+      <DeckSelector />
       <Button onClick={handleClick} style={{ marginTop: '24px' }}>
         Create room
       </Button>

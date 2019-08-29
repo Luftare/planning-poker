@@ -22,7 +22,7 @@ const Option = styled.div`
   border-radius: 5px;
 `;
 
-export const OptionGroup = ({ options, activeIndex, onChange }, ...rest) => {
+export const OptionGroup = ({ options, activeIndex, onChange, ...rest }) => {
   return (
     <Container {...rest}>
       {options.map((option, index) => (

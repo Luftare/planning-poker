@@ -9,6 +9,7 @@ export default withRouter(props => {
   const { roomId } = props.match.params;
   const [name] = useGlobal('name');
   const [, setVoting] = useGlobal('voting');
+  const [, setDeckIndex] = useGlobal('deckIndex');
   const [facilitator, setFacilitator] = useGlobal('facilitator');
   const [, setUsers] = useGlobal('users');
   const [currentVoteTopic, setCurrentVoteTopic] = useGlobal('currentVoteTopic');
@@ -26,6 +27,7 @@ export default withRouter(props => {
     socket.on('ROOM_STATE', roomState => {
       setUsers(roomState.users);
       setVoting(roomState.voting);
+      setDeckIndex(roomState.deckIndex);
       const self = roomState.users.find(u => u.id === socket.id);
       const selfIsFacilitator = self && self.facilitator;
       setFacilitator(selfIsFacilitator);
@@ -34,17 +36,8 @@ export default withRouter(props => {
     return () => {
       socket.removeAllListeners();
     };
-  }, [
-    history,
-    socket,
-    name,
-    setUsers,
-    setVoting,
-    setFacilitator,
-    setCurrentVoteTopic,
-    roomId,
-    facilitator,
-  ]);
+    // eslint-disable-next-line
+  }, []);
 
   const handleCardSelection = vote => {
     props.socket.emit('VOTE', { vote }, (err, roomState) => {

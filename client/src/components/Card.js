@@ -11,6 +11,7 @@ const Container = styled.div`
   height: 80px;
   font-size: 32px;
   cursor: pointer;
+  font-weight: 300;
 `;
 
 export default ({ label, ...rest }) => <Container {...rest}>{label}</Container>;

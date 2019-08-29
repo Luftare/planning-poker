@@ -21,7 +21,7 @@ setGlobal({
   decks: [
     {
       label: 'T-shirt',
-      cards: ['xs', 's', 'm', 'l', 'xl', 'xxl'],
+      cards: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
     },
     {
       label: 'Exponential',
