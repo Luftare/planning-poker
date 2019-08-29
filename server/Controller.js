@@ -50,14 +50,19 @@ class Controller {
       socket.on('JOIN_ROOM', ({ id, name }, callback) => {
         room = this.rooms[id];
 
-        if (room) {
-          room.addUser(name, socket.id);
-          socket.join(id);
-          callback(null, room.getState());
-          this.io.sockets.in(id).emit('ROOM_STATE', room.getState());
-        } else {
-          callback('Room not found.');
+        if (!room) {
+          return callback('Room not found.');
         }
+
+        const duplicateName = room.users.some(u => u.name === name);
+        if (duplicateName) {
+          return callback('Name reserved.');
+        }
+
+        room.addUser(name, socket.id);
+        socket.join(id);
+        callback(null, room.getState());
+        this.io.sockets.in(id).emit('ROOM_STATE', room.getState());
       });
 
       socket.on('ROOM_STATE', callback => {

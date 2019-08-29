@@ -38,7 +38,7 @@ export default withRouter(props => {
     socket.emit('JOIN_ROOM', { id: roomId, name }, (err, roomState) => {
       if (err) {
         console.log(err);
-        history.push(`/`);
+        // history.push(`/`);
       } else {
         setDeckIndex(roomState.deckIndex);
         setUsers(roomState.users);

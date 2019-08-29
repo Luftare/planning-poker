@@ -27,6 +27,7 @@ export default withRouter(props => {
       (err, roomState) => {
         if (err) {
           console.log(err);
+          history.push(`/${roomId}/login`);
         } else {
           setRoomId(roomState.id);
           setUsers(roomState.users);
