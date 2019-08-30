@@ -1,4 +1,4 @@
-import React from 'reactn';
+import React, { useGlobal } from 'reactn';
 import { FaCopy } from 'react-icons/fa';
 import styled from 'styled-components';
 import { theme } from '../styles';
@@ -23,18 +23,26 @@ const CopyLink = styled.div`
   }
 `;
 
-export default props => (
-  <CopyLink
-    {...props}
-    onClick={e => {
-      navigator.clipboard.writeText(props.children).then(
-        () => {},
-        err => {
-          console.error(err);
-        }
-      );
-    }}
-  >
-    Copy url <FaCopy size="14px" style={{ marginLeft: '8px' }} />
-  </CopyLink>
-);
+export default props => {
+  const [, setInfo] = useGlobal('info');
+  const [, setError] = useGlobal('error');
+
+  return (
+    <CopyLink
+      {...props}
+      onClick={e => {
+        setInfo('');
+        navigator.clipboard.writeText(props.children).then(
+          () => {
+            setInfo('Copied to clipboard.');
+          },
+          err => {
+            setError(err);
+          }
+        );
+      }}
+    >
+      Share url <FaCopy size="14px" style={{ marginLeft: '8px' }} />
+    </CopyLink>
+  );
+};

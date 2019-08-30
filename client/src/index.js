@@ -19,6 +19,7 @@ setGlobal({
   currentVoteTopic: '',
   voting: false,
   error: '',
+  info: '',
   decks: [
     {
       label: 'T-shirt',

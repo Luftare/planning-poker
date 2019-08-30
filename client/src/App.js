@@ -5,12 +5,13 @@ import Lobby from './views/Lobby';
 import Login from './views/Login';
 import Vote from './views/Vote';
 import QR from './views/QR';
-import ErrorWidget from './components/ErrorWidget';
+import NotificationWidget from './components/NotificationWidget';
 
 function App(props) {
   return (
     <>
-      <ErrorWidget />
+      <NotificationWidget topic="error" type="error" />
+      <NotificationWidget topic="info" type="info" />
       <Router>
         <Route exact path="/" render={() => <CreateRoom {...props} />} />
         <Route exact path="/:roomId" render={() => <Lobby {...props} />} />

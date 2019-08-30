@@ -2,6 +2,17 @@ import React, { useGlobal, useEffect, useState } from 'reactn';
 import styled from 'styled-components';
 import { theme } from '../styles';
 
+const typeStyles = {
+  color: {
+    error: theme.colors.white,
+    info: theme.colors.white,
+  },
+  backgroundColor: {
+    error: theme.colors.danger,
+    info: theme.colors.info,
+  },
+};
+
 const Container = styled.div`
   pointer-events: none;
   display: flex;
@@ -16,33 +27,34 @@ const Container = styled.div`
 
 const Message = styled.div`
   pointer-events: all;
-  padding: 16px;
-  color: ${theme.colors.white};
-  background-color: ${theme.colors.danger};
+  padding: 8px;
+  font-size: 14px;
+  color: ${({ type }) => typeStyles.color[type]};
+  background-color: ${({ type }) => typeStyles.backgroundColor[type]};
   transform: ${({ show }) => (show ? 'translateY(0)' : 'translateY(-100%)')};
-  opacity: ${({ show }) => (show ? 0.7 : 0)};
+  opacity: ${({ show }) => (show ? 1 : 0)};
   transition: all 400ms;
   cursor: pointer;
 `;
 
-export default props => {
-  const [error] = useGlobal('error');
+export default ({ topic, type, ...rest }) => {
+  const [message] = useGlobal(topic);
   const [show, setShow] = useState(false);
   const [hideTimeout, setHideTimeout] = useState(0);
 
   useEffect(() => {
-    if (error) {
+    if (message) {
       clearTimeout(hideTimeout);
       setShow(true);
 
       const timeoutId = setTimeout(() => {
         setShow(false);
-      }, 5000);
+      }, 2500);
 
       setHideTimeout(timeoutId);
     }
     // eslint-disable-next-line
-  }, [error]);
+  }, [message]);
 
   const hideError = () => {
     clearTimeout(hideTimeout);
@@ -50,9 +62,9 @@ export default props => {
   };
 
   return (
-    <Container {...props}>
-      <Message show={show} onClick={hideError}>
-        {error}
+    <Container {...rest}>
+      <Message show={show} onClick={hideError} type={type}>
+        {message}
       </Message>
     </Container>
   );

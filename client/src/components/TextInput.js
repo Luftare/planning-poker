@@ -21,7 +21,7 @@ const TextInput = styled.input`
   border: 1px solid ${theme.colors.grey};
   box-sizing: border-box;
   width: 100%;
-  margin-right: ${marginRight => (marginRight ? '8px' : 0)}
+  margin-right: ${({ marginRight }) => (marginRight ? '8px' : 0)}
 
   :focus {
     border: 1px solid #fdc500;
