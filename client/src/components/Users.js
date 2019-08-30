@@ -2,7 +2,6 @@ import React, { useGlobal } from 'reactn';
 import styled from 'styled-components';
 import User from './User';
 import Facilitator from './Facilitator';
-import FormLabel from './FormLabel';
 
 const Container = styled.div`
   display: grid;
@@ -48,9 +47,7 @@ export default ({
           onAssignToFacilitator={() => onAssignToFacilitator(user)}
         />
       ))}
-      {voters.length === 0 && !showControls && (
-        <div style={{ textAlign: '' }}>None present.</div>
-      )}
+      {voters.length === 0 && <div>None present.</div>}
     </Container>
   );
 };

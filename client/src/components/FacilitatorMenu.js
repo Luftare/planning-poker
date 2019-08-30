@@ -6,6 +6,7 @@ import Column from './Column';
 import Users from './Users';
 import FormLabel from './FormLabel';
 import { CenteredPage } from './Page';
+import { theme } from '../styles';
 
 export default ({ onRemoveUser, onAssignToFacilitator, ...rest }) => {
   const [, setShowMenu] = useGlobal('showMenu');
@@ -18,6 +19,7 @@ export default ({ onRemoveUser, onAssignToFacilitator, ...rest }) => {
           <FaTimes
             onClick={() => setShowMenu(false)}
             style={{ cursor: 'pointer' }}
+            color={theme.colors.grey}
           />
         </Title>
         <FormLabel>Users</FormLabel>
@@ -31,7 +33,7 @@ export default ({ onRemoveUser, onAssignToFacilitator, ...rest }) => {
           showControls
           facilitator
         />
-        <FormLabel>Deck</FormLabel>
+        <FormLabel>Deck type</FormLabel>
         <DeckSelector />
       </Column>
     </CenteredPage>
