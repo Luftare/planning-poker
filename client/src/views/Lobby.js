@@ -4,7 +4,7 @@ import { FaRedoAlt } from 'react-icons/fa';
 import { theme } from '../styles';
 import Menu from '../components/Menu';
 import NavBar from '../components/NavBar';
-import { Page } from '../components/Page';
+import { HorizontallyCenteredPage } from '../components/Page';
 import { Button } from '../components/Button';
 import Users from '../components/Users';
 import Title from '../components/Title';
@@ -184,7 +184,7 @@ export default withRouter(props => {
   }
 
   return (
-    <Page>
+    <HorizontallyCenteredPage>
       <NavBar />
 
       <Column style={{ flexGrow: 1, marginTop: '64px' }}>
@@ -200,6 +200,6 @@ export default withRouter(props => {
       <Column style={{ position: 'sticky', bottom: 0 }}>
         {facilitator && votingControls}
       </Column>
-    </Page>
+    </HorizontallyCenteredPage>
   );
 });

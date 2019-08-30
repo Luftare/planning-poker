@@ -6,7 +6,7 @@ import Column from './Column';
 import { Button } from './Button';
 import Users from './Users';
 import FormLabel from './FormLabel';
-import { Page } from './Page';
+import { HorizontallyCenteredPage } from './Page';
 import { theme } from '../styles';
 
 export default ({
@@ -19,7 +19,7 @@ export default ({
   const [facilitator] = useGlobal('facilitator');
 
   return (
-    <Page {...rest}>
+    <HorizontallyCenteredPage {...rest}>
       <Column>
         <Title style={{ justifyContent: 'space-between', marginTop: 0 }}>
           <span>Menu</span>
@@ -54,6 +54,6 @@ export default ({
           Leave room
         </Button>
       </Column>
-    </Page>
+    </HorizontallyCenteredPage>
   );
 };
