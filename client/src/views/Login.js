@@ -26,6 +26,7 @@ export default withRouter(props => {
     const id = roomId || '';
     socket.emit('DOES_ROOM_EXIST', id, (err, exists) => {
       if (!exists) {
+        setError('');
         setError('Room not found.');
         history.push('/');
       }
@@ -44,6 +45,9 @@ export default withRouter(props => {
         }
       );
     }, 700);
+    return () => {
+      socket.removeAllListeners();
+    };
     // eslint-disable-next-line
   }, []);
 
@@ -66,9 +70,9 @@ export default withRouter(props => {
         setVoting(roomState.voting);
 
         if (roomState.voting) {
-          history.push(`/${roomState.id}/vote`);
+          history.push(`/room/${roomState.id}/vote`);
         } else {
-          history.push(`/${roomState.id}`);
+          history.push(`/room/${roomState.id}`);
         }
       }
     });

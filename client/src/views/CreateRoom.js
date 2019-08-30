@@ -70,11 +70,11 @@ export default withRouter(props => {
       (err, roomState) => {
         if (err) {
           setError(err);
-          history.push(`/${roomId}/login`);
+          history.push(`/room/${roomId}/login`);
         } else {
           setRoomId(roomState.id);
           setUsers(roomState.users);
-          history.push(`/${roomState.id}`);
+          history.push(`/room/${roomState.id}`);
         }
       }
     );

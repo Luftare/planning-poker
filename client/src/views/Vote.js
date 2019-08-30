@@ -9,6 +9,8 @@ export default withRouter(props => {
   const { roomId } = props.match.params;
   const [name] = useGlobal('name');
   const [, setVoting] = useGlobal('voting');
+  const [, setError] = useGlobal('voting');
+  const [, setShowMenu] = useGlobal('showMenu');
   const [, setDeckIndex] = useGlobal('deckIndex');
   const [facilitator, setFacilitator] = useGlobal('facilitator');
   const [, setUsers] = useGlobal('users');
@@ -16,9 +18,18 @@ export default withRouter(props => {
 
   useEffect(() => {
     if (!name && !facilitator) {
-      history.push(`/${roomId}/login`);
-      return;
+      history.push(`/room/${roomId}/login`);
+      return () => {
+        socket.removeAllListeners();
+      };
     }
+
+    socket.on('QUIT_ROOM', () => {
+      setError('Disconnected from room.');
+      setShowMenu(false);
+      socket.removeAllListeners();
+      history.push('/');
+    });
 
     socket.on('START_VOTE', roomState => {
       setCurrentVoteTopic(roomState.voteTopic);
@@ -47,7 +58,7 @@ export default withRouter(props => {
       } else {
         setUsers(roomState.users);
         setVoting(roomState.voting);
-        props.history.push(`/${roomState.id}`);
+        props.history.push(`/room/${roomState.id}`);
       }
     });
   };

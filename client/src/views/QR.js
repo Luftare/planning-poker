@@ -11,7 +11,7 @@ export default withRouter(props => {
   return (
     <CenteredPage>
       <Link
-        to={`/${roomId}`}
+        to={`/room/${roomId}`}
         style={{
           position: 'absolute',
           top: '8px',
@@ -21,10 +21,10 @@ export default withRouter(props => {
       >
         Back
       </Link>
-      <QRCode value={`${window.location.host}/${roomId}`} size={size} />
+      <QRCode value={`${window.location.host}/room/${roomId}`} size={size} />
       <div
         style={{ marginTop: '16px', fontSize: '24px' }}
-      >{`${window.location.host}/${roomId}`}</div>
+      >{`${window.location.host}/room/${roomId}`}</div>
     </CenteredPage>
   );
 });

@@ -1,5 +1,6 @@
 import React from 'reactn';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Home from './views/Home';
 import CreateRoom from './views/CreateRoom';
 import Lobby from './views/Lobby';
 import Login from './views/Login';
@@ -13,15 +14,20 @@ function App(props) {
       <NotificationWidget topic="error" type="error" />
       <NotificationWidget topic="info" type="info" />
       <Router>
-        <Route exact path="/" render={() => <CreateRoom {...props} />} />
-        <Route exact path="/:roomId" render={() => <Lobby {...props} />} />
-        <Route exact path="/:roomId/qr" render={() => <QR {...props} />} />
+        <Route exact path="/" render={() => <Home {...props} />} />
+        <Route exact path="/create" render={() => <CreateRoom {...props} />} />
+        <Route exact path="/room/:roomId" render={() => <Lobby {...props} />} />
+        <Route exact path="/room/:roomId/qr" render={() => <QR {...props} />} />
         <Route
           exact
-          path="/:roomId/login"
+          path="/room/:roomId/login"
           render={() => <Login {...props} />}
         />
-        <Route exact path="/:roomId/vote" render={() => <Vote {...props} />} />
+        <Route
+          exact
+          path="/room/:roomId/vote"
+          render={() => <Vote {...props} />}
+        />
       </Router>
     </>
   );
