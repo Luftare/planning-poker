@@ -8,7 +8,7 @@ import { Button } from '../components/Button';
 import Users from '../components/Users';
 import Title from '../components/Title';
 import CopyLink from '../components/CopyLink';
-import { TextInput } from '../components/TextInput';
+import TextInput from '../components/TextInput';
 import DeckSelector from '../components/DeckSelector';
 import FormLabel from '../components/FormLabel';
 
@@ -133,12 +133,12 @@ export default withRouter(props => {
   const votingControls = (
     <form style={{ display: 'flex' }} onSubmit={startVote}>
       <TextInput
-        placeholder="New topic (optional)"
+        placeholder="optional"
+        label="Topic"
         value={nextVoteTopic}
         onChange={e => setNextVoteTopic(e.target.value)}
-        style={{ marginRight: '8px' }}
+        inlineContent={<Button type="submit">Vote</Button>}
       />
-      <Button type="submit">Vote</Button>
     </form>
   );
 

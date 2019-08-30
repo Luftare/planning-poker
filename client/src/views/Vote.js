@@ -22,6 +22,7 @@ export default withRouter(props => {
 
     socket.on('START_VOTE', roomState => {
       setCurrentVoteTopic(roomState.voteTopic);
+      setDeckIndex(roomState.deckIndex);
     });
 
     socket.on('ROOM_STATE', roomState => {

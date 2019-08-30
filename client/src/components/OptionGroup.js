@@ -4,7 +4,6 @@ import { theme } from '../styles';
 
 const Container = styled.div`
   width: 100%;
-  max-width: 300px;
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 8px;

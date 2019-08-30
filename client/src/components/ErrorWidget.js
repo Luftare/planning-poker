@@ -15,11 +15,14 @@ const Container = styled.div`
 `;
 
 const Message = styled.div`
+  pointer-events: all;
   padding: 16px;
   color: ${theme.colors.white};
   background-color: ${theme.colors.danger};
   transform: ${({ show }) => (show ? 'translateY(0)' : 'translateY(-100%)')};
-  transition: transform 300ms;
+  opacity: ${({ show }) => (show ? 0.7 : 0)};
+  transition: all 400ms;
+  cursor: pointer;
 `;
 
 export default props => {
@@ -41,9 +44,16 @@ export default props => {
     // eslint-disable-next-line
   }, [error]);
 
+  const hideError = () => {
+    clearTimeout(hideTimeout);
+    setShow(false);
+  };
+
   return (
     <Container {...props}>
-      <Message show={show}> {error}</Message>
+      <Message show={show} onClick={hideError}>
+        {error}
+      </Message>
     </Container>
   );
 };

@@ -1,11 +1,14 @@
-import React, { useEffect, useGlobal } from 'reactn';
+import React, { useEffect, useGlobal, useState } from 'reactn';
 import { withRouter } from 'react-router-dom';
 import { FaComments } from 'react-icons/fa';
+import { throttle } from 'lodash';
 import { CenteredPage } from '../components/Page';
-import { TextInput } from '../components/TextInput';
+import TextInput from '../components/TextInput';
 import Title from '../components/Title';
 import { Button } from '../components/Button';
 import { theme } from '../styles';
+
+let isUserNameAvailable;
 
 export default withRouter(props => {
   const { socket, history } = props;
@@ -17,6 +20,7 @@ export default withRouter(props => {
   const [, setUsers] = useGlobal('users');
   const [, setRoomId] = useGlobal('roomId');
   const [, setCurrentVoteTopic] = useGlobal('currentVoteTopic');
+  const [userNameIsAvailable, setUserNameIsAvailable] = useState(true);
 
   useEffect(() => {
     const id = roomId || '';
@@ -26,6 +30,16 @@ export default withRouter(props => {
         history.push('/');
       }
     });
+
+    isUserNameAvailable = throttle(name => {
+      socket.emit(
+        'DOES_NAME_EXIST_IN_ROOM',
+        { roomId, name },
+        (err, exists) => {
+          setUserNameIsAvailable(!exists);
+        }
+      );
+    }, 700);
     // eslint-disable-next-line
   }, []);
 
@@ -62,14 +76,19 @@ export default withRouter(props => {
         <FaComments style={{ marginRight: '12px' }} color={theme.colors.grey} />{' '}
         {roomId}
       </Title>
-      <form onSubmit={handleSubmit} style={{ display: 'flex' }}>
+      <form onSubmit={handleSubmit} style={{}}>
         <TextInput
           placeholder="Name"
-          onChange={e => setName(e.target.value)}
-          style={{ marginRight: '8px' }}
           value={name}
+          onChange={e => {
+            isUserNameAvailable(e.target.value);
+            setName(e.target.value);
+          }}
+          verifySuccess
+          label="Name"
+          error={!userNameIsAvailable && 'name reserved.'}
+          inlineContent={<Button type="submit">Join</Button>}
         />
-        <Button type="submit">Join</Button>
       </form>
     </CenteredPage>
   );
