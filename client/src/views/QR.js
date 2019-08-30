@@ -23,7 +23,12 @@ export default withRouter(props => {
       </Link>
       <QRCode value={`${window.location.host}/room/${roomId}`} size={size} />
       <div
-        style={{ marginTop: '16px', fontSize: '24px' }}
+        style={{
+          margin: '16px',
+          fontSize: '24px',
+          overflowWrap: 'break-word',
+          maxWidth: '80%',
+        }}
       >{`${window.location.host}/room/${roomId}`}</div>
     </CenteredPage>
   );

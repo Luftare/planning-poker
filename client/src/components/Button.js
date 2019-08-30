@@ -1,9 +1,36 @@
 import styled from 'styled-components';
 import { theme } from '../styles';
 
+const color = type => {
+  switch (type) {
+    case 'danger':
+      return theme.colors.white;
+    default:
+      return theme.colors.black;
+  }
+};
+
+const backgroundColor = type => {
+  switch (type) {
+    case 'danger':
+      return theme.colors.danger;
+    default:
+      return theme.colors.primary;
+  }
+};
+
+const hoverBackgroundColor = type => {
+  switch (type) {
+    case 'danger':
+      return theme.colors.danger;
+    default:
+      return '#ffb700';
+  }
+};
+
 export const Button = styled.button`
-  background-color: ${theme.colors.primary};
-  color: ${theme.colors.black};
+  background-color: ${({ type }) => backgroundColor(type)};
+  color: ${({ type }) => color(type)};
   padding: 16px 20px;
   border: none;
   font-size: 18px;
@@ -14,7 +41,7 @@ export const Button = styled.button`
   text-transform: uppercase;
 
   :hover {
-    background-color: #ffb700;
+    background-color: ${({ type }) => hoverBackgroundColor(type)};
   }
 
   :disabled {

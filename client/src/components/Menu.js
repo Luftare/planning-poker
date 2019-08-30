@@ -6,7 +6,7 @@ import Column from './Column';
 import { Button } from './Button';
 import Users from './Users';
 import FormLabel from './FormLabel';
-import { CenteredPage } from './Page';
+import { Page } from './Page';
 import { theme } from '../styles';
 
 export default ({
@@ -19,9 +19,9 @@ export default ({
   const [facilitator] = useGlobal('facilitator');
 
   return (
-    <CenteredPage {...rest}>
+    <Page {...rest}>
       <Column>
-        <Title style={{ justifyContent: 'space-between' }}>
+        <Title style={{ justifyContent: 'space-between', marginTop: 0 }}>
           <span>Menu</span>
           <FaTimes
             onClick={() => setShowMenu(false)}
@@ -46,10 +46,14 @@ export default ({
             <DeckSelector />
           </>
         )}
-        <Button onClick={onLeaveRoom} style={{ marginTop: '16px' }}>
+        <Button
+          onClick={onLeaveRoom}
+          style={{ marginTop: '16px' }}
+          type="danger"
+        >
           Leave room
         </Button>
       </Column>
-    </CenteredPage>
+    </Page>
   );
 };

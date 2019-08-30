@@ -4,7 +4,7 @@ import { FaRedoAlt } from 'react-icons/fa';
 import { theme } from '../styles';
 import Menu from '../components/Menu';
 import NavBar from '../components/NavBar';
-import { CenteredPage } from '../components/Page';
+import { Page } from '../components/Page';
 import { Button } from '../components/Button';
 import Users from '../components/Users';
 import Title from '../components/Title';
@@ -184,15 +184,10 @@ export default withRouter(props => {
   }
 
   return (
-    <CenteredPage
-      style={{
-        justifyContent: facilitator ? 'space-between' : 'flex-start',
-        padding: '16px',
-      }}
-    >
+    <Page>
       <NavBar />
 
-      <Column>
+      <Column style={{ flexGrow: 1, marginTop: '64px' }}>
         {currentVoteTopic && topicTitle}
 
         <Users
@@ -202,7 +197,9 @@ export default withRouter(props => {
           facilitator={facilitator}
         />
       </Column>
-      <Column>{facilitator && votingControls}</Column>
-    </CenteredPage>
+      <Column style={{ position: 'sticky', bottom: 0 }}>
+        {facilitator && votingControls}
+      </Column>
+    </Page>
   );
 });

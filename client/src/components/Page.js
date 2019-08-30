@@ -4,7 +4,7 @@ import { theme } from '../styles';
 export const Page = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 16px;
+  padding: 16px;
   background-color: ${theme.colors.white};
   box-sizing: border-box;
   min-height: 100vh;
