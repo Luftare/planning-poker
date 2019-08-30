@@ -12,6 +12,7 @@ const socket = io(socketUrl);
 setGlobal({
   name: window.localStorage.getItem('voter-name') || '',
   facilitator: false,
+  showMenu: false,
   roomId: '',
   users: [],
   deckIndex: 0,

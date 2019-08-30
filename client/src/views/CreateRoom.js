@@ -4,6 +4,7 @@ import { throttle } from 'lodash';
 import { Button } from '../components/Button';
 import { CenteredPage } from '../components/Page';
 import Title from '../components/Title';
+import Column from '../components/Column';
 import DeckSelector from '../components/DeckSelector';
 import TextInput from '../components/TextInput';
 import FormLabel from '../components/FormLabel';
@@ -79,9 +80,11 @@ export default withRouter(props => {
     );
   };
 
+  const validFormInput = roomNameIsAvailable && name && currentRoomId;
+
   return (
     <CenteredPage>
-      <div style={{ width: '100%', maxWidth: '350px' }}>
+      <Column>
         <Title>Create room</Title>
         <form
           onSubmit={handleSubmit}
@@ -93,8 +96,9 @@ export default withRouter(props => {
             label="Room name"
             placeholder={newRoomId}
             value={customRoomId}
-            verifySuccess
-            error={!roomNameIsAvailable && 'room already exists.'}
+            validateInput
+            inputValid={roomNameIsAvailable}
+            error={!roomNameIsAvailable && 'reserved.'}
             onChange={e => {
               isRoomNameAvailable(e.target.value);
               setCustomRoomId(e.target.value);
@@ -103,18 +107,20 @@ export default withRouter(props => {
           <TextInput
             label="Name"
             placeholder="Name"
+            validateInput
+            inputValid={!!name}
             value={name}
             onChange={e => setName(e.target.value)}
           />
           <Button
             type="submit"
             style={{ marginTop: '16px', float: 'right' }}
-            disabled={!name || !newRoomId}
+            disabled={!validFormInput}
           >
             Create
           </Button>
         </form>
-      </div>
+      </Column>
     </CenteredPage>
   );
 });

@@ -39,7 +39,8 @@ export default ({
   children,
   label,
   error = '',
-  verifySuccess,
+  validateInput,
+  inputValid,
   inlineContent,
   ...rest
 }) => {
@@ -49,7 +50,7 @@ export default ({
         <FormLabel>
           <span style={{ marginRight: '10px' }}>{label}</span>
           {error && <ErrorText>{error}</ErrorText>}
-          {verifySuccess && !error && (
+          {validateInput && !error && inputValid && (
             <FaCheck size="16px" color={theme.colors.success} />
           )}
         </FormLabel>

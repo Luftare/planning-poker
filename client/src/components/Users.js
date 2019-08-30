@@ -2,6 +2,7 @@ import React, { useGlobal } from 'reactn';
 import styled from 'styled-components';
 import User from './User';
 import Facilitator from './Facilitator';
+import FormLabel from './FormLabel';
 
 const Container = styled.div`
   display: grid;
@@ -29,7 +30,6 @@ export default ({
       {facilitatorUser && !showControls && (
         <Facilitator
           name={facilitatorUser.name}
-          style={{ marginBottom: '24px' }}
           onToggleEdit={onToggleEdit}
           editMode={editMode}
           showControls={showControls}
@@ -49,7 +49,7 @@ export default ({
         />
       ))}
       {voters.length === 0 && !showControls && (
-        <div style={{ textAlign: 'center' }}>Waiting for voters...</div>
+        <div style={{ textAlign: '' }}>None present.</div>
       )}
     </Container>
   );

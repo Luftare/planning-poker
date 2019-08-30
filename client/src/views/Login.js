@@ -31,6 +31,10 @@ export default withRouter(props => {
       }
     });
 
+    socket.emit('DOES_NAME_EXIST_IN_ROOM', { roomId, name }, (err, exists) => {
+      setUserNameIsAvailable(!exists);
+    });
+
     isUserNameAvailable = throttle(name => {
       socket.emit(
         'DOES_NAME_EXIST_IN_ROOM',
@@ -84,10 +88,15 @@ export default withRouter(props => {
             isUserNameAvailable(e.target.value);
             setName(e.target.value);
           }}
-          verifySuccess
+          validateInput
+          inputValid={!!name}
           label="Name"
-          error={!userNameIsAvailable && 'name reserved.'}
-          inlineContent={<Button type="submit">Join</Button>}
+          error={!userNameIsAvailable && 'reserved.'}
+          inlineContent={
+            <Button type="submit" disabled={!name || !userNameIsAvailable}>
+              Join
+            </Button>
+          }
         />
       </form>
     </CenteredPage>

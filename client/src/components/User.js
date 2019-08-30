@@ -37,8 +37,6 @@ export default ({
   showControls,
   ...rest
 }) => {
-  // Yes, that ternary madness is crap
-
   const controls = showControls && (
     <>
       <FaBan
@@ -60,19 +58,19 @@ export default ({
     </>
   );
 
+  const indicator = hideVote ? (
+    <VoteBox fill={voted ? theme.colors.success : theme.colors.lightGrey} />
+  ) : (
+    <VoteBox>{vote}</VoteBox>
+  );
+
   return (
     <Container {...rest}>
       <LabelContainer>
         {controls}
         <Label>{name}</Label>
       </LabelContainer>
-      {hideVote ? (
-        <VoteBox
-          fill={voted ? theme.colors.success : theme.colors.lightGrey}
-        ></VoteBox>
-      ) : (
-        <VoteBox>{vote}</VoteBox>
-      )}
+      {!showControls && indicator}
     </Container>
   );
 };
