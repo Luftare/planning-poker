@@ -48,6 +48,11 @@ class Controller {
         if (room) {
           room.removeUser(userId);
           this.io.sockets.to(userId).emit('QUIT_ROOM');
+          const targetSocket = this.io.sockets.connected[userId];
+
+          if (targetSocket) {
+            targetSocket.leave(room.id);
+          }
           this.io.sockets.in(room.id).emit('ROOM_STATE', room.getState());
         }
       });
