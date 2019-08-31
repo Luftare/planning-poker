@@ -158,13 +158,13 @@ export default withRouter(props => {
   const topicTitle = (
     <>
       <Title style={{ margin: '32px 0' }}>
-        <span>{currentVoteTopic}</span>
+        <span style={{ overflowWrap: 'break-word' }}>{currentVoteTopic}</span>
         {facilitator && (
           <FaRedoAlt
             onClick={voteAgain}
             size="18px"
             color={theme.colors.grey}
-            style={{ cursor: 'pointer', marginLeft: '8px' }}
+            style={{ cursor: 'pointer', marginLeft: '8px', flexShrink: 0 }}
           >
             vote again
           </FaRedoAlt>
