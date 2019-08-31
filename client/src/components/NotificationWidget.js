@@ -38,17 +38,25 @@ const Message = styled.div`
 `;
 
 export default ({ topic, type, ...rest }) => {
-  const [message] = useGlobal(topic);
+  const [message, setMessage] = useGlobal(topic);
   const [show, setShow] = useState(false);
   const [hideTimeout, setHideTimeout] = useState(0);
+  const [resetTimeout, setResetTimeout] = useState(0);
 
   useEffect(() => {
     if (message) {
       clearTimeout(hideTimeout);
+      clearTimeout(resetTimeout);
       setShow(true);
 
       const timeoutId = setTimeout(() => {
         setShow(false);
+
+        setResetTimeout(
+          setTimeout(() => {
+            setMessage('');
+          }, 450)
+        );
       }, 2500);
 
       setHideTimeout(timeoutId);

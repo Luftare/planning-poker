@@ -37,6 +37,13 @@ class Controller {
         callback(null, !!this.rooms[roomId]);
       });
 
+      socket.on('DOES_NAME_EXIST_IN_ROOM', ({ roomId, name }, callback) => {
+        const exists =
+          this.rooms[roomId] &&
+          this.rooms[roomId].users.some(u => u.name === name);
+        callback(null, exists);
+      });
+
       socket.on('KICK_USER', userId => {
         if (room) {
           room.removeUser(userId);
